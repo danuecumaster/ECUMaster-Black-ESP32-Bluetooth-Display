@@ -1,3 +1,5 @@
+# 🚗 ECUMaster Black + ESP32 Bluetooth Display
+
 [![ESP32](https://img.shields.io/badge/board-ESP32-blue.svg)](https://www.espressif.com/en/products/socs/esp32)
 [![ECUMaster](https://img.shields.io/badge/device-ECUMaster-black.svg)](https://www.ecumaster.com)
 [![Bluetooth](https://img.shields.io/badge/communication-Bluetooth-brightgreen.svg)](https://en.wikipedia.org/wiki/Bluetooth)
@@ -7,16 +9,56 @@
 [![Language: C++](https://img.shields.io/badge/language-C++-orange.svg)](https://isocpp.org)
 [![Vehicle Telemetry](https://img.shields.io/badge/type-Telemetry-lightgrey.svg)]()
 
-ESP32 - ECUMaster Black Bluetooth Display
+---
 
-**If you can't use SerialBT.setPin(pin) - Downgrade to ESP 2.0.17 in board manager**
+### 📦 Description
 
-It features automatic Bluetooth reconnection and real-time warnings for check-engine-light (CEL), high / low coolant temperature, high RPM, low battery voltage, high air-fuel ratio (AFR), high boost, etc.
+This project interfaces the **ECUMaster Black ECU** with an **ESP32** to create a Bluetooth-enabled dashboard display, featuring:
 
-Hardware - ESP32 JC2432W328 (https://www.aliexpress.com/item/1005006729707613.html)
+- Automatic Bluetooth reconnection
+- Real-time monitoring of engine vitals
+- Custom alerts (CEL, coolant temp, RPM, AFR, voltage, boost, etc.)
+- TFT screen GUI with **LVGL**
 
-3D Printed Case - https://www.thingiverse.com/thing:6705691
+> ⚠️ **Note:** If `SerialBT.setPin(pin)` doesn't work, downgrade to **ESP32 Arduino Core 2.0.17** in the board manager.
 
-Video - https://imgur.com/a/ajaXTuj
+---
 
-ECU - ECUMaster Black + Bluetooth Adapter
+### 🧰 Hardware Used
+
+- **ESP32 JC2432W328**  
+  [🛒 AliExpress link](https://www.aliexpress.com/item/1005006729707613.html)
+- **3D Printed Case**  
+  [📦 Thingiverse STL](https://www.thingiverse.com/thing:6705691)
+- **ECU**  
+  ECUMaster Black + Bluetooth Adapter
+
+---
+
+### 📽️ Demo
+
+[🎬 View Demo on Imgur](https://imgur.com/a/ajaXTuj)
+
+---
+
+### 📥 Installation
+
+1. Clone this repo
+2. Install dependencies (LVGL, BluetoothSerial, etc.)
+3. Upload to ESP32
+4. Pair with ECUMaster Black BT adapter
+5. Enjoy real-time data on-screen!
+
+---
+
+### 📜 License
+
+This project is licensed under **GPL v3**.  
+See the [LICENSE](./LICENSE) file for more info.
+
+---
+
+### ❤️ Credits & Contributions
+
+Made with ❤️ for petrolheads.  
+Contributions, forks, and feature requests are welcome!
