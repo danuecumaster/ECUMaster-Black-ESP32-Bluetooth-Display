@@ -1,3 +1,12 @@
+[![ESP32](https://img.shields.io/badge/board-ESP32-blue.svg)](https://www.espressif.com/en/products/socs/esp32)
+[![ECUMaster](https://img.shields.io/badge/device-ECUMaster-black.svg)](https://www.ecumaster.com)
+[![Bluetooth](https://img.shields.io/badge/communication-Bluetooth-brightgreen.svg)](https://en.wikipedia.org/wiki/Bluetooth)
+[![LVGL](https://img.shields.io/badge/UI-LVGL-purple.svg)](https://lvgl.io/)
+[![Arduino](https://img.shields.io/badge/framework-Arduino-blue.svg)](https://www.arduino.cc)
+[![License: GPL v3](https://img.shields.io/badge/license-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0.en.html)
+[![Language: C++](https://img.shields.io/badge/language-C++-orange.svg)](https://isocpp.org)
+[![Vehicle Telemetry](https://img.shields.io/badge/type-Telemetry-lightgrey.svg)]()
+
 ESP32 - ECUMaster Black Bluetooth Display
 
 **If you can't use SerialBT.setPin(pin) - Downgrade to ESP 2.0.17 in board manager**
