@@ -1,6 +1,6 @@
 ESP32 - ECUMaster Black Bluetooth Display
 
-If cannot use SerialBT.setPin(pin) - Downgrade to ESP 2.0.17 in board manager
+**If cannot use SerialBT.setPin(pin) - Downgrade to ESP 2.0.17 in board manager**
 
 It features automatic Bluetooth reconnection and real-time warnings for check-engine-light (CEL), high / low coolant temperature, high RPM, low battery voltage, high air-fuel ratio (AFR), high boost, etc.
 
