@@ -24,6 +24,47 @@ This project interfaces the **ECUMaster Black ECU** with an **ESP32** to create 
 
 ---
 
+### ✅ Tested On
+
+- ESP32 JC2432W328
+- Arduino Core v2.0.17
+- ECUMaster Black with Bluetooth Adapter
+- LVGL v8.3
+
+---
+
+### 📥 Installation
+
+1. Clone this repo
+2. Install dependencies (LVGL, BluetoothSerial, etc.)
+3. Edit LVGL and touch library config if needed
+4. Edit the code - Use your MAC address or use Bluetooth name and Pin.
+5. Upload to ESP32
+6. Pair with ECUMaster Black BT adapter
+7. Enjoy real-time data on-screen!
+
+---
+
+### 📦 Dependencies
+
+- [BluetoothSerial](https://github.com/espressif/arduino-esp32/tree/master/libraries/BluetoothSerial)
+- [LVGL](https://lvgl.io)
+
+--- 
+
+### ❓ FAQ
+
+**Q:** SerialBT.setPin() doesn't work?  
+**A:** Use ESP32 Arduino Core v2.0.17. Later versions removed this feature.
+
+**Q:** Display not initializing?  
+**A:** Check wiring and power — ESP32 needs enough current for backlight.
+
+**Q:** Blurry text?  
+**A:** Check lv_conf.h - LV_COLOR_16_SWAP
+
+---
+
 ### 🧰 Hardware Used
 
 - **ESP32 JC2432W328**  
@@ -38,16 +79,6 @@ This project interfaces the **ECUMaster Black ECU** with an **ESP32** to create 
 ### 📽️ Demo
 
 [🎬 View Demo on Imgur](https://imgur.com/a/ajaXTuj)
-
----
-
-### 📥 Installation
-
-1. Clone this repo
-2. Install dependencies (LVGL, BluetoothSerial, etc.)
-3. Upload to ESP32
-4. Pair with ECUMaster Black BT adapter
-5. Enjoy real-time data on-screen!
 
 ---
 
