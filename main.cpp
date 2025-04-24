@@ -224,13 +224,13 @@ void loop() {
     }
   }
 
-  /*if (cel > 0 || clt > 105 || rpm > 7200 || boost > 1.10 || (bat < 12.00 && bat > 1.00)) {
+  /*if (cel > 0 || clt > 105 || rpm > 7000 || boost > 1.10 || (bat < 12.00 && bat > 1.00)) {
     digitalWrite(buzzerPin, HIGH);  // Buzzer ON
   } else {
     digitalWrite(buzzerPin, LOW);   // Buzzer OFF
   }*/
   
-  buzzerOn = (cel > 0 || clt > 105 || rpm > 7200 || boost > 1.10 || (bat < 12.00 && bat > 1.00));
+  buzzerOn = (cel > 0 || clt > 105 || rpm > 7000 || boost > 1.10 || (bat < 12.00 && bat > 1.00));
   digitalWrite(buzzerPin, (millis() % 600 < 300) && buzzerOn);
 
   lv_obj_invalidate(table);
@@ -325,7 +325,7 @@ static void table_event_cb_bg(lv_event_t *e) {
     lv_color_t bg_color = lv_color_make(30, 30, 30);
     lv_color_t text_color = lv_color_white();
 
-    if (row == 0 && col == 1 && value > 7200.00) {
+    if (row == 0 && col == 1 && value > 7000.00) {
       bg_color = lv_color_make(0, 0, 255);
       text_color = lv_color_white();
     }
