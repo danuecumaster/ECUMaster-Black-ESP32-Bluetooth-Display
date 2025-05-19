@@ -7,8 +7,8 @@
 #include <stdexcept>
 using namespace std;
 
-//#define USE_NAME // If connecting using name and pin
-const char *pin = "1234"; //EMU BT adapter pin
+//#define USE_NAME
+const char *pin = "1234";
 String myBtName = "ESP32-BT-Master";
 
 #if !defined(CONFIG_BT_SPP_ENABLED)
@@ -18,11 +18,12 @@ String myBtName = "ESP32-BT-Master";
 BluetoothSerial SerialBT;
 
 #ifdef USE_NAME
-String slaveName = "EMUCANBT_SPP"; //EMU BT adapter name
+String slaveName = "EMUCANBT_SPP";
 #else
-uint8_t address[6] = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }; //EMU BT adapter's MAC address
+uint8_t address[6] = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }; //Replace with your MAC address
 #endif
 
+const int backLightPin = 27;
 const int buzzerPin = 22;
 bool buzzerOn = false;
 bool btIconSts = false;
@@ -120,12 +121,15 @@ void create_table() {
 }
 
 void setup() {
+  tft.init();
+  pinMode(backLightPin, OUTPUT);
+  digitalWrite(backLightPin, LOW);
+  uint16_t darkGray = ((30 & 0xF8) << 8) | ((30 & 0xFC) << 3) | (30 >> 3);
+  tft.fillScreen(darkGray);
+  tft.setRotation(1);
   Serial.begin(1000000);
 
   pinMode(buzzerPin, OUTPUT);
-
-  tft.begin();
-  tft.setRotation(1);
 
   // Initialize LVGL
   lv_init();
@@ -142,7 +146,9 @@ void setup() {
   lv_disp_drv_register(&disp_drv);
 
   SerialBT.begin(myBtName, true);
+  
   create_table();
+  digitalWrite(backLightPin, HIGH);
   connectToBt();
 }
 
@@ -358,19 +364,19 @@ static void table_event_cb_bg(lv_event_t *e) {
 }
 
 void update_bt_icon_color(bool is_connected, bool firstTime) {
-	if(btIconSts != is_connected || firstTime) {
-		if (!style_initialized) {
-			lv_style_init(&style_bt);
-			style_initialized = true;
-		}
-		if (is_connected) {
-			lv_style_set_text_color(&style_bt, lv_color_make(0, 255, 0)); // Green
-		} else {
-			lv_style_set_text_color(&style_bt, lv_color_make(0, 0, 255)); // Red
-		}
-		lv_obj_add_style(bt_icon_label, &style_bt, 0);
-		btIconSts = is_connected;
-	}	
+  if(btIconSts != is_connected || firstTime) {
+    if (!style_initialized) {
+      lv_style_init(&style_bt);
+      style_initialized = true;
+    }
+    if (is_connected) {
+      lv_style_set_text_color(&style_bt, lv_color_make(0, 255, 0)); // Green
+    } else {
+      lv_style_set_text_color(&style_bt, lv_color_make(0, 0, 255)); // Red
+    }
+    lv_obj_add_style(bt_icon_label, &style_bt, 0);
+    btIconSts = is_connected;
+  } 
 }
 
 void create_bt_icon() {
