@@ -9,7 +9,7 @@ using namespace std;
 
 //#define USE_NAME
 const char *pin = "1234";
-String myBtName = "ESP32-BT-Master";
+String myBtName = "ESP32-BT-Master-1";
 
 #if !defined(CONFIG_BT_SPP_ENABLED)
 #error Serial Bluetooth not available or not enabled. It is only available for the ESP32 chip.
@@ -20,7 +20,7 @@ BluetoothSerial SerialBT;
 #ifdef USE_NAME
 String slaveName = "EMUCANBT_SPP";
 #else
-uint8_t address[6] = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }; //Replace with your MAC address
+uint8_t address[6] = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }; // Update MAC address (preferred over WiFi name and pin)
 #endif
 
 const int backLightPin = 27;
@@ -46,6 +46,8 @@ unsigned long previousMillis = 0;
 const unsigned long reconnectInterval = 5000;
 
 LV_FONT_DECLARE(lv_font_montserrat_14);
+LV_FONT_DECLARE(lv_font_montserrat_18);
+LV_FONT_DECLARE(lv_font_montserrat_20);
 LV_FONT_DECLARE(lv_font_montserrat_28);
 
 lv_obj_t *bt_icon_label;
@@ -53,7 +55,7 @@ lv_obj_t *bt_icon_label;
 // Display & LVGL setup
 TFT_eSPI tft = TFT_eSPI();
 static lv_disp_draw_buf_t draw_buf;
-static lv_color_t buf[LV_HOR_RES_MAX * 10];
+static lv_color_t buf[LV_HOR_RES_MAX * 20];
 lv_obj_t *table;
 
 // LVGL Display Flush Callback
@@ -69,20 +71,24 @@ void my_disp_flush(lv_disp_drv_t *disp, const lv_area_t *area, lv_color_t *color
 
 // Initialize LVGL Table
 void create_table() {
-  table = lv_table_create(lv_scr_act());
-  lv_obj_align(table, LV_ALIGN_CENTER, -1, 0);
-
-  lv_obj_set_style_text_opa(table, LV_OPA_COVER, 0);
-
-  lv_obj_clear_flag(lv_scr_act(), LV_OBJ_FLAG_SCROLLABLE);
-
   lv_obj_set_style_bg_color(lv_scr_act(), lv_color_make(30, 30, 30), LV_PART_MAIN);
 
+  table = lv_table_create(lv_scr_act());
+  lv_obj_align(table, LV_ALIGN_CENTER, -1, -1);
+  lv_obj_set_style_text_opa(table, LV_OPA_COVER, 0);
+  lv_obj_clear_flag(lv_scr_act(), LV_OBJ_FLAG_SCROLLABLE);
+  lv_obj_set_scrollbar_mode(table, LV_SCROLLBAR_MODE_OFF);
   lv_obj_set_style_text_color(table, lv_color_white(), LV_PART_ITEMS);
-
   lv_obj_set_style_bg_color(table, lv_color_make(30, 30, 30), LV_PART_MAIN);
+  //lv_obj_set_style_text_font(table, &lv_font_montserrat_20, LV_PART_ITEMS);
 
-  lv_obj_set_style_text_font(table, &lv_font_montserrat_14, LV_PART_ITEMS);
+  static lv_style_t style_cell0;
+  lv_style_init(&style_cell0);
+  lv_style_set_pad_top(&style_cell0, 12.8);
+  lv_style_set_pad_bottom(&style_cell0, 12.8);
+  lv_style_set_pad_left(&style_cell0, 4);
+  lv_style_set_pad_right(&style_cell0, 4);
+  lv_obj_add_style(table, &style_cell0, LV_PART_ITEMS);
 
   lv_table_set_col_cnt(table, 4);
   lv_table_set_row_cnt(table, 6);
@@ -91,10 +97,10 @@ void create_table() {
   lv_obj_set_style_border_color(table, lv_color_white(), LV_PART_ITEMS);
   lv_obj_set_style_border_side(table, LV_BORDER_SIDE_FULL, LV_PART_ITEMS);
 
-  lv_table_set_col_width(table, 0, 60);
-  lv_table_set_col_width(table, 1, 100);
-  lv_table_set_col_width(table, 2, 60);
-  lv_table_set_col_width(table, 3, 100);
+  lv_table_set_col_width(table, 0, 53);
+  lv_table_set_col_width(table, 1, 105);
+  lv_table_set_col_width(table, 2, 47);
+  lv_table_set_col_width(table, 3, 115);
 
   lv_table_add_cell_ctrl(table, 5, 1, LV_TABLE_CELL_CTRL_MERGE_RIGHT);
   lv_table_add_cell_ctrl(table, 5, 2, LV_TABLE_CELL_CTRL_MERGE_RIGHT);
@@ -146,7 +152,7 @@ void setup() {
   lv_disp_drv_register(&disp_drv);
 
   SerialBT.begin(myBtName, true);
-  
+
   create_table();
   digitalWrite(backLightPin, HIGH);
   connectToBt();
@@ -154,15 +160,15 @@ void setup() {
 
 void connectToBt() {
   bool connected;
-  #ifndef USE_NAME
-    SerialBT.setPin(pin);
-  #endif
-  
-  #ifdef USE_NAME
-    connected = SerialBT.connect(slaveName);
-  #else
-    connected = SerialBT.connect(address);
-  #endif
+#ifndef USE_NAME
+  SerialBT.setPin(pin);
+#endif
+
+#ifdef USE_NAME
+  connected = SerialBT.connect(slaveName);
+#else
+  connected = SerialBT.connect(address);
+#endif
 
   if (connected) {
     Serial.println("Connected Successfully!");
@@ -188,11 +194,10 @@ void loop() {
   }
 
   update_bt_icon_color(SerialBT.hasClient(), false);
-  
+
   // Wait until at least 5 bytes are available
   while (SerialBT.available() >= 5) {
     SerialBT.readBytes(frame, 5);  // Read exactly 5 bytes
-
     channel = frame[0];
     value = (frame[2] << 8) | frame[3];
     chData = static_cast<int>(channel);
@@ -229,12 +234,6 @@ void loop() {
       cel = decodeCheckEngine(value);
     }
   }
-
-  /*if (cel > 0 || clt > 105 || rpm > 7000 || boost > 1.10 || (bat < 12.00 && bat > 1.00)) {
-    digitalWrite(buzzerPin, HIGH);  // Buzzer ON
-  } else {
-    digitalWrite(buzzerPin, LOW);   // Buzzer OFF
-  }*/
   
   buzzerOn = (cel > 0 || clt > 105 || rpm > 7000 || boost > 1.10 || (bat < 12.00 && bat > 1.00));
   digitalWrite(buzzerPin, (millis() % 600 < 300) && buzzerOn);
@@ -292,7 +291,12 @@ void my_table_event_cb(lv_event_t * e) {
     uint16_t row = dsc->id / lv_table_get_col_cnt(table);
     uint16_t col = dsc->id % lv_table_get_col_cnt(table);
 
-    dsc->label_dsc->align = LV_TEXT_ALIGN_LEFT;
+    if (col == 0 || col == 2) {
+      dsc->label_dsc->font = &lv_font_montserrat_18;
+    } else if (col == 1 || col == 3) {
+      dsc->label_dsc->font = &lv_font_montserrat_20;
+    }
+    dsc->label_dsc->align = LV_TEXT_ALIGN_CENTER;
     if ((row == 0 && col == 1) || (row == 0 && col == 3) || (row == 1 && col == 1) || (row == 1 && col == 3) || (row == 2 && col == 1) || (row == 2 && col == 3) || (row == 3 && col == 1) || (row == 3 && col == 3) ||
         (row == 4 && col == 1) || (row == 4 && col == 3)) {
       dsc->label_dsc->align = LV_TEXT_ALIGN_RIGHT;
@@ -364,7 +368,7 @@ static void table_event_cb_bg(lv_event_t *e) {
 }
 
 void update_bt_icon_color(bool is_connected, bool firstTime) {
-  if(btIconSts != is_connected || firstTime) {
+  if (btIconSts != is_connected || firstTime) {
     if (!style_initialized) {
       lv_style_init(&style_bt);
       style_initialized = true;
@@ -376,13 +380,13 @@ void update_bt_icon_color(bool is_connected, bool firstTime) {
     }
     lv_obj_add_style(bt_icon_label, &style_bt, 0);
     btIconSts = is_connected;
-  } 
+  }
 }
 
 void create_bt_icon() {
   bt_icon_label = lv_label_create(lv_scr_act());
   lv_label_set_text(bt_icon_label, LV_SYMBOL_BLUETOOTH);
   lv_obj_set_style_text_font(bt_icon_label, &lv_font_montserrat_28, LV_PART_MAIN);
-  lv_obj_align(bt_icon_label, LV_ALIGN_BOTTOM_RIGHT, -3, -1);
+  lv_obj_align(bt_icon_label, LV_ALIGN_BOTTOM_RIGHT, -3, -5);
   update_bt_icon_color(SerialBT.hasClient(), true);
 }
