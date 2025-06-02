@@ -63,6 +63,9 @@ This project interfaces the **ECUMaster Black ECU** with an **ESP32** to create 
 **Q:** Blurry text?  
 **A:** Check lv_conf.h - LV_COLOR_16_SWAP
 
+**Q:** Font size not working?  
+**A:** Check lv_conf.h - Enable the required font sizes. 
+
 ---
 
 ### 🧰 Hardware Used
