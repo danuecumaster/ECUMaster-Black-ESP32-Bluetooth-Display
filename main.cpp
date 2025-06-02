@@ -9,7 +9,7 @@ using namespace std;
 
 //#define USE_NAME
 const char *pin = "1234";
-String myBtName = "ESP32-BT-Master-1";
+String myBtName = "ESP32-BT-Master";
 
 #if !defined(CONFIG_BT_SPP_ENABLED)
 #error Serial Bluetooth not available or not enabled. It is only available for the ESP32 chip.
@@ -20,7 +20,7 @@ BluetoothSerial SerialBT;
 #ifdef USE_NAME
 String slaveName = "EMUCANBT_SPP";
 #else
-uint8_t address[6] = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }; // Update MAC address (preferred over WiFi name and pin)
+uint8_t address[6] = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }; // Replace with your MAC address
 #endif
 
 const int backLightPin = 27;
