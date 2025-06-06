@@ -79,9 +79,13 @@ This project interfaces the **ECUMaster Black ECU** with an **ESP32** to create 
 
 ---
 
-### 📽️ Demo
+## 📺 Demo Videos
 
-[🎬 Video 1 ](https://youtu.be/b16--jYl7CY)   [🎬 Video 2 ](https://youtu.be/1yv-feC6I2c)
+### 🔹 Video 1
+[![Watch on YouTube](https://img.youtube.com/vi/b16--jYl7CY/0.jpg)](https://youtu.be/b16--jYl7CY)
+
+### 🔹 Video 2
+[![Watch on YouTube](https://img.youtube.com/vi/1yv-feC6I2c/0.jpg)](https://youtu.be/1yv-feC6I2c)
 
 ---
 
