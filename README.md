@@ -39,9 +39,10 @@ This project interfaces the **ECUMaster Black ECU** with an **ESP32** to create 
 2. Install dependencies (LVGL, BluetoothSerial, etc.)
 3. Edit LVGL and touch library config if needed
 4. Edit the code - Use your MAC address or use Bluetooth name and Pin.
-5. Upload to ESP32
-6. Pair with ECUMaster Black BT adapter
-7. Enjoy real-time data on-screen!
+5. Update your LVGL and eSPI config files.
+6. Upload to ESP32
+7. Pair with ECUMaster Black BT adapter
+8. Enjoy real-time data on-screen!
 
 ---
 
