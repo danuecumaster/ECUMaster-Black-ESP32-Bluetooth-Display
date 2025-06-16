@@ -205,7 +205,7 @@ void loop() {
       rpm = static_cast<int>(value);
       lv_table_set_cell_value(table, 0, 1, String(rpm).c_str());
     } else if (chData == 28) {
-      spd = (static_cast<int>(value) / 2.8);
+      spd = (static_cast<int>(value));
       lv_table_set_cell_value(table, 0, 3, (String(spd) + " KM/H").c_str());
     } else if (chData == 12) {
       afr = (static_cast<float>(value) / 10);
