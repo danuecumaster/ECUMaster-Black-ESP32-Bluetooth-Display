@@ -17,7 +17,7 @@ This project interfaces the **ECUMaster Black ECU** with an **ESP32** to create 
 
 - Automatic Bluetooth reconnection
 - Real-time monitoring of engine vitals
-- Custom alerts (CEL, coolant temp, RPM, AFR, voltage, boost, etc.)
+- Custom alerts (CEL, coolant temp, RPM, AFR, voltage, boost, etc.) via display & buzzer
 - TFT screen GUI with **LVGL**
 
 > ⚠️ **Note:** If `SerialBT.setPin(pin)` doesn't work, downgrade to **ESP32 Arduino Core 2.0.17** in the board manager.
@@ -27,6 +27,7 @@ This project interfaces the **ECUMaster Black ECU** with an **ESP32** to create 
 ### ✅ Tested On
 
 - ESP32 JC2432W328
+- Active 3.3V buzzer
 - Arduino Core v2.0.17
 - ECUMaster Black with Bluetooth Adapter
 - LVGL v8.3
@@ -40,8 +41,9 @@ This project interfaces the **ECUMaster Black ECU** with an **ESP32** to create 
 3. Edit LVGL and eSPI config if needed.
 4. Edit the code - Use your MAC address or use Bluetooth name and Pin.
 5. Upload to ESP32
-6. Pair with ECUMaster Black BT adapter
-7. Enjoy real-time data on-screen!
+6. Optional - Connect an active 3.0-3.3V buzzer to GPIO Pin 22 (for warnings/CEL)
+7. Pair with ECUMaster Black BT adapter
+8. Enjoy real-time data on-screen!
 
 ---
 
@@ -77,7 +79,9 @@ This project interfaces the **ECUMaster Black ECU** with an **ESP32** to create 
   [📦 Thingiverse STL](https://www.thingiverse.com/thing:6705691)
 - **ECU**  
   ECUMaster Black + Bluetooth Adapter
-
+- **Active 3.3V buzzer**    
+ [🛒 AliExpress link](https://www.aliexpress.com/item/1005008682347898.html)
+  
 ---
 
 ## 📺 Demo Videos
