@@ -36,8 +36,8 @@ This project interfaces the **ECUMaster Black ECU** with an **ESP32** to create 
 ### 📥 Installation
 
 1. Clone this repo
-2. Install dependencies (LVGL, BluetoothSerial, etc.)
-3. Edit LVGL and touch library config if needed
+2. Install dependencies (LVGL, eSPI, BluetoothSerial, etc.)
+3. Edit LVGL and eSPI config if needed.
 4. Edit the code - Use your MAC address or use Bluetooth name and Pin.
 5. Upload to ESP32
 6. Pair with ECUMaster Black BT adapter
@@ -58,7 +58,7 @@ This project interfaces the **ECUMaster Black ECU** with an **ESP32** to create 
 **A:** Use ESP32 Arduino Core v2.0.17. Later versions removed this feature.
 
 **Q:** Display not initializing?  
-**A:** Check wiring and power — ESP32 needs enough current for backlight.
+**A:** Check eSPI & LVGL configuration or contact the manufacturer of your display for configuration guidelines.
 
 **Q:** Blurry text?  
 **A:** Check lv_conf.h - LV_COLOR_16_SWAP
