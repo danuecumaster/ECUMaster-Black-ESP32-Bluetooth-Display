@@ -49,6 +49,7 @@ This project interfaces the **ECUMaster Black ECU** with an **ESP32** to create 
 
 - [BluetoothSerial](https://github.com/espressif/arduino-esp32/tree/master/libraries/BluetoothSerial)
 - [LVGL](https://lvgl.io)
+- [eSPI](https://github.com/Bodmer/TFT_eSPI)
 
 --- 
 
