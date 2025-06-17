@@ -253,8 +253,8 @@ int decodeCheckEngine(uint16_t value) {
       cel_names = "CLT ";
     }
     if (value & (1 << 1)) {
-      //cel_codes++;  // Bit 1
-      //cel_names += "IAT ";
+      cel_codes++;  // Bit 1
+      cel_names += "IAT ";
     }
     if (value & (1 << 2)) {
       cel_codes++;  // Bit 2
