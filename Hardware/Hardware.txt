@@ -1,6 +1,6 @@
 ### 
-ESP32 - JC2432W328 or any other ESP32 and a display module.
-https://www.aliexpress.com/item/1005006729707613.html
+ESP32 JC2432W328 or any other ESP32 and a display module.
+Example: https://www.aliexpress.com/item/1005006729707613.html
 
 ###
 3D Printed Case
@@ -8,9 +8,12 @@ If JC2432W328 - https://www.thingiverse.com/thing:6705691
 
 ###
 Active 3.3V buzzer
-https://www.aliexpress.com/item/1005008682347898.html
+Example: https://www.aliexpress.com/item/1005008682347898.html
 
 ###
-ECUMaster Black + Bluetooth Adapter
+ECUMaster Black - https://www.ecumaster.com/products/emu-black/
+
+###
+EMU CAN Bluetooth Adapter - https://ecumasterusa.com/products/bluetooth-adapter-for-ecumaster-emu-can-bus
 
 
