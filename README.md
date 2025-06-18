@@ -103,3 +103,7 @@ See the [LICENSE](./LICENSE) file for more info.
 
 Made with ❤️ for petrolheads.  
 Contributions, forks, and feature requests are welcome!
+
+
+## docs
+http://pan.jczn1688.com/1/HMI%20display
