@@ -1,5 +1,5 @@
 ### 
-ESP32 - JC2432W328 or any other ESP32 and a display module
+ESP32 - JC2432W328 or any other ESP32 and a display module.
 https://www.aliexpress.com/item/1005006729707613.html
 
 ###
