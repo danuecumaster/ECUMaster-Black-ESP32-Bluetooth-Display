@@ -1,0 +1,3 @@
+ESP32 JC2432W328 or any other ESP32 and a display module.
+Example: https://www.aliexpress.com/item/1005006729707613.html
+Documentation: https://drive.google.com/drive/folders/1Sk4sIXgLAqPZ03BzYb0IwUftMXJ9QMLN?usp=sharing
