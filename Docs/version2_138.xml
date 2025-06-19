@@ -1,0 +1,890 @@
+<?xml version="1.0" encoding="utf-8"?>
+<log>
+	<frameData>
+
+		<bitfields name="flags1"> 
+			<bitfield name="Was reset"  value="1">  </bitfield>
+			<bitfield name="Fuel cut"   value="2">  </bitfield>
+		</bitfields>
+
+		<variables>			
+			<symbol name="frameStamp"	storage="word"  type="value" divider = "1"	 unit=""	group="Debug" gauge="0" />
+			<symbol name="RPM"      storage="word"  type="value" divider = "1"   unit="rpm" group="Basic" gauge="1" gaugeMin="0" gaugeMax="9000"  tick="1000" gaugeDiv="1000" color="1" priority="1" channel="1" redStart="8000" alarm="8500" alarmCond="gt" maxLimit="15000"/>
+			<symbol name="MAP"			storage="word"  type="value" divider = "1"   unit="kPa" group="Basic,Pressure" priority="2" color="1" gauge="1" gaugeMin="0" gaugeMax="400" tick="50" channel="2" redStart="290" alarm="300" alarmCond="gt" maxLimit="600"/>
+			<symbol name="TPS"			storage="ubyte" type="value" divider = "1"   unit="%"   group="Basic" priority="3" color="1" gauge="1" gaugeMin="0" gaugeMax="100"	  tick="10" channel="3"/>
+			<symbol name="IAT"			storage="sbyte" type="value" divider = "1"   unit="°C"   group="Basic,Temperature" priority="4" color="1" gauge="1" gaugeMin="-40" gaugeMax="120" tick="20" channel="4"/>
+			<symbol name="Batt"			storage="word"  type="value" divider = "37"  unit="V"	group="Basic" priority="10" color="4" gauge="1" gaugeMin="8" gaugeMax="20"	  tick="2"		  userName="Battery voltage" channel="5" redStart="12.5" alarm="8" alarmCond="lt"/>
+
+			<symbol name="TPSRate"		storage="sbyte" type="value" divider = "1"   unit="%/s" group="Enrichments" gauge="0" gaugeMin="-120" gaugeMax="120" tick="10"	  userName="TPS Rate" priority="2" color = "1"/>
+			<symbol name="VE"			storage="word"  type="value" divider = "10"   unit="%"   group="Fueling"  gauge="0" gaugeMin="0" gaugeMax="200"	   tick="10" color="3" priority="6"/>
+			<symbol name="IgnAngle"		storage="sbyte" type="value" divider = "2"   unit="°BTDC" group="Ignition" gauge="1" gaugeMin="-20" gaugeMax="60"  tick="20"	  userName="Ignition Angle" color="1" priority="1" channel="6"/>
+			<symbol name="Warmup"	    storage="ubyte" type="value" divider = "1"   unit="%"   group="Enrichments" gauge="0" gaugeMin="50"   gaugeMax="250"  tick="10" userName="Warmup enrichment" color="3"/>
+			<symbol name="InjOpeningTime" storage="ubyte" type="value" divider = "32"   unit="ms"   group="Fueling" gauge="0" gaugeMin="0"   gaugeMax="25"  tick="10" userName="Injectors cal. time" color="2" priority="5"/>
+			<symbol name="Egt1"			storage="word"  type="value" divider = "1"   unit="°C"   group="EGT" priority="11" color="2" gauge="1" gaugeMin="0"   gaugeMax="1100"  tick="100" gaugeDiv="100" userName="EGT #1" channel="8" redStart="900" alarm="950" alarmCond="gt"/>
+			<symbol name="Egt2"			storage="word"  type="value" divider = "1"   unit="°C"   group="EGT" priority="12" color="2" gauge="1" gaugeMin="0"   gaugeMax="1100"  tick="100" gaugeDiv="100" userName="EGT #2" channel="9" redStart="900" alarm="950" alarmCond="gt"/>
+			<symbol name="knockValue"	storage="ubyte"  type="value" divider = "51" unit="V"	group="Knock Sensing"  gauge="1" gaugeMin="0" gaugeMax="5" tick="1" userName="Knock Sensor value" color="2" priority="1" />
+			<symbol name="cpuLoad" storage="ubyte"  type="value" divider = "1"   unit="%"	group="Debug" gauge="0" gaugeMin="0"   gaugeMax="200" userName="CPU Load" />
+			
+			<symbol name="tcActive"				storage="ubyte:1"		type="paramList:yesNo" divider = "1" unit="" group="TC"  gauge="0" gaugeMin="0" gaugeMax="1"  tick="20" userName="TC active" color="3" priority="1" />
+			<symbol name="ignRTCCorr"			storage="ubyte:1"		type="paramList:yesNo" userName="I.TC correction" divider = "1" unit="" group="Ignition active corr."  gauge="0" color="1" priority="95" />
+			<symbol name="pqueuOverflow"	storage="ubyte:1"		type="paramList:yesNo" userName="Priority queued overflow" divider = "1" unit="" group="Other" gauge="0" color="1" priority="97" />
+
+			<symbol name="idleTarget"			storage ="word"			type="value" divider = "1"   unit="rpm" group="Idle" gauge="0" gaugeMin="0"     gaugeMax="3000" userName="Idle Target" priority="1" color="2"/>
+			<symbol name="idleDC"					storage ="ubyte"		type="value" divider = "1"   unit="%" group="Idle" gauge="0" gaugeMin="0"	   gaugeMax="100"  userName="Idle Valve DC" priority="3" color="3"/>
+			<symbol name="idleStep"				storage ="ubyte"		type="value" divider = "1"   unit="step" group="Idle" gauge="0" gaugeMin="0"    gaugeMax="255"  userName="Idle Motor Step" priority="4" color="3" />
+			<symbol name="idleAngleCorr"	storage ="sbyte"		type="value" divider = "2"   unit="°" group="Idle" gauge="1" gaugeMin="-20"   gaugeMax="20" tick="10" userName="Idle Ign. Correction" priority="6" color="4"/>
+			<symbol name="curentPIDCorrection" storage ="sbyte" type="value" divider = "1" unit="" group="Idle" gauge="0" gaugeMin="-50"   gaugeMax="50"  userName="Idle PID DC Correction" priority="5" color="4"/>
+			<symbol name="dwellTime"	storage="ubyte"  type="value" divider = "20"  unit="ms"		group="Ignition" gauge="1" gaugeMin="0"		 gaugeMax="10" tick="2" userName="Dwell Time" color="3" priority="6" channel="11" />
+			<symbol name="dwellError"	storage="sbyte"  type="value" divider = "62"   unit="ms"	group="Ignition" gauge="0" gaugeMin="-2"   gaugeMax="2" userName="Dwell Error" color="3" priority="7"/>
+			<symbol name="pulseWidth"	storage="word"   type="value" divider = "62"   unit="ms"	group="Fueling"  gauge="1" gaugeMin="0"	  gaugeMax="25" tick="5" userName="Injectors PW" color="2" priority="2" channel="7"/>
+			<symbol name="ase"			storage="ubyte"  type="value" divider = "1"    unit="%"		group="Enrichments"  gauge="0" gaugeMin="100" gaugeMax="250" userName="Afterstart Enrichment" color="2"/>
+			<symbol name="wboRI"		storage="ubyte"  type="value" divider = "51"   unit="V"		group="WBO"     gauge="0" gaugeMin="0" gaugeMax="3" userName="WBO RI" color="1"/>
+			<symbol name="wboHeaterDC"	storage="percent7"  type="value" divider = "1"    unit="%"		group="WBO"     gauge="0" gaugeMin="0" gaugeMax="100" userName="WBO Heater DC" color="1"/>
+			<symbol name="wboVS"		storage="ubyte"  type="value" divider = "51"   unit="V"		group="WBO"     gauge="0" gaugeMin="0" gaugeMax="5" userName="WBO VS" color="1"/>
+			<symbol name="accEnrich"	  storage="ubyte"  type="value" divider = "1"   unit="%"	group="Enrichments"     gauge="0" gaugeMin="0" gaugeMax="100" userName="Acc. Enrichment" priority="1" color = "1"/>
+			<symbol name="accEnrichPW"	  storage="word"   type="value" divider = "62"   unit="ms"	group="Fueling"   gauge="1" gaugeMin="0" gaugeMax="20" tick="4" userName="Acc. Enrichment PW" color="2" priority="5"/>
+			<symbol name="egoCorrection"  storage="ubyte"  type="value" divider = "2"   unit="%"	group="Fueling"   gauge="1" gaugeMin="75" gaugeMax="125" tick="8" userName="EGO Correction" color="4" priority="8"/>
+			<symbol name="wboIPMeas"	  storage="sword"  type="value" divider = "128"   unit="mA"	group="WBO"   gauge="0" gaugeMin="-6" gaugeMax="6" tick="3" userName="WBO IP Meas." color="1"/>
+			<symbol name="wboLambda"	  storage="ubyte"  type="value" divider = "128"   unit="λ"	group="WBO"   gauge="1" gaugeMin="0.5" gaugeMax="1.3" tick="0.121" precision="3" userName="Lambda" color="2" channel="27" minLimit="0.6" maxLimit="2.0"/>
+			<symbol name="pidPTerm"		  storage="sword"  type="value" divider = "128"   unit=""	group="Other"   gauge="0" gaugeMin="-200" gaugeMax="200" userName="Debug PID P Term" priority="2" color="2"/>
+			<symbol name="pidITerm"		  storage="sword"  type="value" divider = "32"    unit=""	group="Other"   gauge="0" gaugeMin="-300" gaugeMax="300" userName="Debug PID I Term" priority="3" color="2"/>
+			<symbol name="pidDTerm"		  storage="sword"  type="value" divider = "128"   unit=""	group="Other"   gauge="0" gaugeMin="-100" gaugeMax="100" userName="Debug PID D Term" priority="4" color="2"/>
+			<symbol name="wasReset"		  storage="ubyte"  type="value" divider = "1"    unit=""	group="Basic" priority="20" color="3" gauge="0" gaugeMin="0" gaugeMax="5" userName="ECU Reset"/>
+			<symbol name="engineNoise"    storage="ubyte"  type="value" divider = "51"   unit="V"	group="Knock Sensing" gauge="1" gaugeMin="0" gaugeMax="5" tick="1" userName="Knock Engine Noise" color="2" priority="2"/>
+			<symbol name="wboAFR"		  storage="ubyte"  type="value" divider = "10"   unit="AFR"	group="WBO"  gauge="1" gaugeMin="10" gaugeMax="20" tick="2" userName="AFR" color="2" channel="12"/>
+			
+			<symbol name="undrivenSpeed"  storage="word"   type="value" divider = "16"   unit="km/h"	group="Vss and gears, TC"   gauge="0" gaugeMin="0" gaugeMax="250" tick="2" userName="Undriven axle speed" color="3" priority="255"/>
+
+			<symbol name="debugW"         storage="word"   type="value" divider = "1"    unit=""	group="Debug"   gauge="0" gaugeMin="0" gaugeMax="65535" tick="2"/>
+
+			<symbol name="knockLevel"     storage="ubyte"  type="value" divider = "51"    unit="V"	group="Knock Sensing"   gauge="1" gaugeMin="0" gaugeMax="5" tick="1" userName="Knock Level" color="1" priority="0" channel="10"/>
+			<symbol name="knockFuelEnrich" storage="ubyte"  type="value" divider = "8"   unit="%"	group="Knock Sensing"   gauge="1" gaugeMin="0" gaugeMax="30" tick="5" userName="Knock Action Fuel Enrich." color="3"/>
+			<symbol name="knockIgnRetard" storage="ubyte"  type="value" divider = "8"   unit="°"  group="Knock Sensing"   gauge="1" gaugeMin="0" gaugeMax="30" tick="5" userName="Knock Action Ign. Retard" color="3"/>
+			<symbol name="iatIgnTrim"     storage="sbyte"  type="value" divider = "2"   unit="°"	group="Ignition"   gauge="1" gaugeMin="-15" gaugeMax="15" tick="5"  userName="IAT Ignition Trim" color="2" priority="3"/>
+			<symbol name="cltIgnTrim"     storage="sbyte"  type="value" divider = "2"   unit="°"  group="Ignition"   gauge="1" gaugeMin="-15" gaugeMax="15" tick="5"  userName="CLT Ignition Trim" color="2" priority="4"/>
+			<symbol name="ignFromTable"   storage="sbyte"  type="value" divider = "2"   unit="°"  group="Ignition"   gauge="1" gaugeMin="-20" gaugeMax="60" tick="20" userName="Ignition From Table" color="2" priority="2"/>
+			<symbol name="vssFreq"		  storage="word"  type="value" divider = "4"   unit="Hz"	group="Vss and gears"  gauge="0" gaugeMin="0" gaugeMax="2000" tick="200" userName="VSS Frequency" priority="2" color="1"/>
+			<symbol name="vssSpeed"		  storage="word"  type="value" divider = "4"   unit="km/h"  group="Vss and gears"  gauge="1" gaugeMin="0" gaugeMax="500" tick="60"   userName="Vehicle Speed" priority="1" color="1" precision="0" channel="28"/>
+			<symbol name="gearRatio"	  storage="word"  type="value" divider = "8"   unit=""	    group="Vss and gears"  gauge="0" gaugeMin="0" gaugeMax="200" tick="10" userName="Gear Ratio" priority="3" color="2"/>
+			<symbol name="gear"				  storage="sbyte" type="value" divider = "1"   unit="Gear"  group="Vss and gears"  gauge="1" gaugeMin="-1" gaugeMax="7"		tick="1"	 userName="Gear" priority="4" color="2" channel="13"/>
+			<symbol name="pwmOutputDC"	  storage="ubyte" type="value" divider = "1"   unit="%"     group="Other,Diff control"		  gauge="1" gaugeMin="0" gaugeMax="100" tick="10"	   userName="PWM #1 DC" priority="20" color="5"/>
+			<symbol name="Baro"			  storage="ubyte" type="value" divider = "1"   unit="kPa"	group="Basic,Pressure"	priority="2" color="1"	  gauge="1" gaugeMin="50" gaugeMax="120" tick="10" userName="BARO" channel="14"/>
+			<symbol name="BaroCorr"		  storage="ubyte" type="value" divider = "1"   unit="%"	    group="Fueling"		  gauge="0" gaugeMin="50" gaugeMax="150" tick="15" userName="BARO Correction" color="5" priority="9"/>
+			<symbol name="lcIgnRetard"	  storage="sbyte" type="value" divider = "2"   unit="°"	group="LC, Gear cut, FS"	 gauge="1" gaugeMin="-30" gaugeMax="30"  tick="6" userName="LC Ign. Retard" priority="3"  color="1"/>
+			<symbol name="lcFuelEnrich"	  storage="ubyte" type="value" divider = "1"   unit="%"	    group="LC, Gear cut, FS"	 gauge="1" gaugeMin="0" gaugeMax="100"  tick="20" userName="LC Fuel Enrichment" priority="2" color="1"/>
+			<symbol name="analogIn1"    storage="ubyte"   type="value"    divider="51"    priority="1"  unit="V"   group="Analog inputs" gauge="1" gaugeMin="0" gaugeMax="5" tick="1" userName="Analog #1"  color="1" channel="15"/>
+			<symbol name="analogIn2"    storage="ubyte"   type="value"    divider="51"    priority="2"  unit="V"   group="Analog inputs" gauge="1" gaugeMin="0" gaugeMax="5" tick="1" userName="Analog #2" color="1" channel="16"/>
+			<symbol name="analogIn3"    storage="ubyte"   type="value"    divider="51"    priority="3"  unit="V"   group="Analog inputs" gauge="1" gaugeMin="0" gaugeMax="5" tick="1" userName="Analog #3" color="1" channel="17"/>
+			<symbol name="analogIn4"    storage="ubyte"   type="value"    divider="51"    priority="4"  unit="V"   group="Analog inputs" gauge="1" gaugeMin="0" gaugeMax="5" tick="1" userName="Analog #4" color="1" channel="18"/>
+			<symbol name="analogIn5"    storage="ubyte"   type="value"    divider="51"    priority="5"  unit="V"   group="Analog inputs" gauge="1" gaugeMin="0" gaugeMax="5" tick="1" userName="Analog #5"  color="1" channel="34"/>
+			<symbol name="analogIn6"    storage="ubyte"   type="value"    divider="51"    priority="6"  unit="V"   group="Analog inputs" gauge="1" gaugeMin="0" gaugeMax="5" tick="1" userName="Analog #6" color="1" channel="35"/>
+			<symbol name="ignError"		  storage="ubyte"  type="paramList:ignError" divider = "1"    unit=""	group="Ignition" gauge="0" gaugeMin="0" gaugeMax="5" tick="1" userName="Trigger error" interpolate="0" color="5" priority="13"/>
+			<symbol name="boostDC"		 	storage="ubyte"  type="value" divider = "1"    unit="%"	group="Boost" gauge="1" gaugeMin="0" gaugeMax="100" tick="10" userName="Boost DC" priority="1" color = "1"/>
+			<symbol name="boostDCFromTable" storage="ubyte"  type="value" divider = "1"    unit="%"	group="Boost" gauge="0" gaugeMin="0" gaugeMax="100" tick="10" userName="Boost DC From Table" priority="3" color = "2"/>
+			<symbol name="boostTarget"      storage="word"  type="value" divider = "1"    unit="kPa"	group="Boost" gauge="1" gaugeMin="0" gaugeMax="600" tick="50" userName="Boost Target" priority="2" color = "1"/>
+			<symbol name="boostCorrection"		 storage="ubyte"  type="value" divider = "1"    unit="%"	group="Boost" gauge="0" gaugeMin="0" gaugeMax="250" tick="25" userName="Boost Correction" priority="5" color = "3"/>
+			<symbol name="boostTableSet"		 storage="ubyte"  type="value" divider = "1"    unit=""	group="Boost" gauge="0" gaugeMin="0" gaugeMax="1" tick="1" userName="Boost Table set" priority="7" color = "4"/>
+			<symbol name="boostTargetFromTable"  storage="word"   type="value" divider = "1"    unit="kPa"	group="Boost" gauge="0" gaugeMin="0" gaugeMax="400" tick="40" userName="Boost Target From Table" priority="4" color = "2"/>
+			<symbol name="boostPIDCorrection"    storage="sbyte"  type="value" divider = "1"    unit="%"	group="Boost" gauge="0" gaugeMin="-50" gaugeMax="50" tick="10" userName="Boost DC PID Correction" priority="6" color = "3"/>
+			<symbol name="camSyncPrimTooth"		 storage="ubyte"  type="value" divider = "1"    unit=""	group="Ignition" gauge="0" gaugeMin="0" gaugeMax="120" tick="1" userName="Cam sync trigger tooth" color="4" priority="9"/>
+			<symbol name="nitrousIgnMod"	 storage="sbyte"  type="value" divider = "2"    unit="°"	group="Nitrous" gauge="0" gaugeMin="-15" gaugeMax="15" tick="1" userName="Nitrous ign. mod." color="2"/>
+			<symbol name="nitrousFuelScale"	 storage="ubyte"  type="value" divider = "1"    unit="%"	group="Nitrous" gauge="0" gaugeMin="0" gaugeMax="125" tick="1" userName="Nitrous fuel scale" color="3"/>
+			<symbol name="flatShiftActive"	   storage="ubyte"  type="value" divider = "1"    unit=""	group="LC, Gear cut, FS" gauge="0" gaugeMin="0" gaugeMax="1" tick="1"   userName="Flat Shift Active" color="2"/>
+			<symbol name="flatShiftCutSpark"   storage="ubyte"  type="value" divider = "1"    unit=""	group="LC, Gear cut, FS" gauge="0" gaugeMin="0" gaugeMax="5" tick="1"   userName="Flat Shift Ign. Cut" color="2"/>
+			<symbol name="flatShiftCutFuel"	   storage="ubyte"  type="value" divider = "1"    unit=""	group="LC, Gear cut, FS" gauge="0" gaugeMin="0" gaugeMax="125" tick="1" userName="Flat Shift Fuel Cut" color="2"/>
+			<symbol name="accIgnCorr"		   storage="sbyte"  type="value" divider = "2"    unit="%" group="Ignition" gauge="0" gaugeMin="-15" gaugeMax="15" tick="1" userName="Acc. Ignition Correction" color="2" priority="5"/>
+			<symbol name="injDC"			   storage="ubyte"  type="value" divider = "2"    unit="%" group="Fueling"  gauge="1" gaugeMin="0" gaugeMax="100"  tick="20" userName="Injectors DC" color="2" priority="3" channel="19"/>
+			<symbol name="emuTemp"			   storage="sbyte"  type="value" divider = "1"    unit="°C" group="Other,Temperature"    gauge="0" gaugeMin="-40" gaugeMax="120" tick="1" userName="ECU Temperature" priority="1" color="1" channel="20"/>
+			<symbol name="iatFuelCorr"		   storage="ubyte"  type="value" divider = "1"    unit="%" group="Fueling" gauge="0" gaugeMin="50" gaugeMax="150" tick="1" userName="IAT Correction" color="5" priority="10"/>
+			<symbol name="cam1Angle"			storage = "sword"  type="value" divider = "2"  unit="°"	group="VVT" gauge="0" gaugeMin="-50" gaugeMax="50" tick="1" userName="CAM1 angle" interpolate="1" color="1" priority="1"/>
+			<symbol name="cam2Angle"			storage = "sword"  type="value" divider = "2"  unit="°"	group="VVT" gauge="0" gaugeMin="-50" gaugeMax="50" tick="1" userName="CAM2 angle" interpolate="1" color="2" priority="4"/>
+			<symbol name="cam1ValveDC"			storage="ubyte"  type="value" divider = "1"  unit="%"	group="VVT" gauge="0" gaugeMin="0" gaugeMax="100" tick="1" userName="CAM1 valve DC" interpolate="1" precision="1" color="1" priority="3"/>
+			<symbol name="cam2ValveDC"			storage="ubyte"  type="value" divider = "1"  unit="%"	group="VVT" gauge="0" gaugeMin="0" gaugeMax="100" tick="1" userName="CAM2 valve DC" interpolate="1" precision="1" color="2" priority="6"/>
+			<symbol name="cam1AngleTarget"		storage="sword"  type="value" divider = "2"  unit="°"	group="VVT" gauge="0" gaugeMin="-50" gaugeMax="50" tick="1" userName="CAM1 angle target" interpolate="1" precision="1" color="1" priority="2"/>
+			<symbol name="cam2AngleTarget"		storage="sword"  type="value" divider = "2"  unit="°"	group="VVT" gauge="0" gaugeMin="-50" gaugeMax="50" tick="1" userName="CAM2 angle target" interpolate="1" precision="1" color="2" priority="5"/>
+			<symbol name="pitLimiterTorqueReduction" storage="ubyte"  type="value"	divider = "1"   unit="%"	group="Other" gauge="0" gaugeMin="0" gaugeMax="2" tick="1" userName="Pit Limiter torque reduction" interpolate="0" priority="15" color="4"/>  
+			<symbol name="oilPressure"			storage="ubyte" type="value" divider = "16"   unit="bar"   group="Pressure" priority="15" color="2" gauge="1" gaugeMin="0" gaugeMax="12" tick="2" precision="1" userName="Oil pressure" channel="21"  redStart="0.5" alarm="0.4" alarmCond="lt"/>
+			<symbol name="oilTemperature"		storage="ubyte" type="value" divider = "1"    unit="°C"	   group="Temperature" priority="1" color="2" gauge="1" gaugeMin="0" gaugeMax="160" tick="20" precision="0" userName="Oil temperature" channel="22" redStart="135" alarm="140" alarmCond="gt"/>
+			<symbol name="fuelPressure"			storage="ubyte" type="value" divider = "16"   unit="bar"   group="Pressure, Fueling" priority="17" color="2" gauge="1" gaugeMin="0" gaugeMax="16" tick="1" precision="1" userName="Fuel pressure" channel="23"/>
+			<symbol name="CLT"					storage="sword" type="value" divider = "1"   unit="°C"   group="Basic,Temperature" priority="5" color="1" gauge="1" gaugeMin="-40" gaugeMax="220" tick="40" channel="24" redStart="100" alarm="105" alarmCond="gt"/>
+			<symbol name="sparkCutPercent"		storage="percent7" type="value" divider = "1"   unit="%"   group="Ignition" gauge="0" gaugeMin="0" gaugeMax="100" tick="20" userName="Spark cut percent" color="6" priority="14"/>
+			<symbol name="etcDC"			    storage="ubyte" type="value" divider = "2"   unit="%"   group="DBW" gauge="0" gaugeMin="0" gaugeMax="100" tick="20" userName="DBW Out. DC" color = "2" priority="9"/>
+			<symbol name="etcTarget"			storage="ubyte" type="value" divider = "2"   unit="%"   group="DBW" gauge="0" gaugeMin="0" gaugeMax="100" tick="20" userName="DBW target" color = "1" priority="1"/>
+			<symbol name="etcPos"				storage="ubyte" type="value" divider = "2"   unit="%"   group="DBW" gauge="0" gaugeMin="0" gaugeMax="100" tick="20" userName="DBW pos" color = "1" priority="2"/>
+			<symbol name="etcError"				storage="sword" type="value" divider = "4"   unit=""   group="DBW" gauge="0" gaugeMin="-100" gaugeMax="100" tick="20" userName="DBW error" color = "3" priority="4"/>
+			<symbol name="etcDeltaError"		storage="sbyte" type="value" divider = "4"   unit=""   group="DBW" gauge="0" gaugeMin="-10" gaugeMax="10" tick="20" userName="DBW delta error" color = "3" priority="5"/>
+			<symbol name="flexFuelFrequency" storage="word" type="value" divider = "1"   unit="Hz"	group="Flex Fuel" gauge="0" gaugeMin="10" gaugeMax="200" tick="1" userName="FF Sensor frequency" priority="1" color="1"/>
+			<symbol name="flexFuelEthanolContent" storage="ubyte" type="value" divider = "2"   unit="%" group="Flex Fuel" gauge="1" gaugeMin="0" gaugeMax="100" tick="20" userName="FF Ethanol content" priority="2"  color="2" channel="25"/>
+			<symbol name="ffBlendVE" storage="ubyte" type="value" divider = "2"   unit="%" group="Flex Fuel" gauge="0" gaugeMin="0" gaugeMax="100" tick="1" userName="FF Blend VE" color="3" priority="3"/>
+			<symbol name="ffBlendIgn" storage="ubyte" type="value" divider = "2"   unit="%" group="Flex Fuel" gauge="0" gaugeMin="0" gaugeMax="100" tick="1" userName="FF Blend IGN" color="3" priority="4"/>
+			<symbol name="ffBlendAFR" storage="ubyte" type="value" divider = "2"   unit="%" group="Flex Fuel" gauge="0" gaugeMin="0" gaugeMax="100" tick="1" userName="FF Blend AFR" color="3" priority="5"/>
+			<symbol name="ffBlendBoost" storage="ubyte" type="value" divider = "2"   unit="%" group="Flex Fuel" gauge="0" gaugeMin="0" gaugeMax="100" tick="1" userName="FF Blend Boost" color="3" priority="6"/>
+			
+			<symbol name="ffTemp" storage="sbyte" type="value" divider = "1"   unit="°C" group="Flex Fuel, Temperature" gauge="1" gaugeMin="-30" gaugeMax="120" tick="30" userName="Fuel Temperature" priority="100" color="3" channel="26"/>
+			
+			<symbol name="ffTempFuelCorr" storage="ubyte" type="value" divider = "1"   unit="%" group="Flex Fuel, Fueling" gauge="0" gaugeMin="50" gaugeMax="150" tick="1" userName="Fuel Temp Correction" priority="101" color="4"/>
+	
+
+			<symbol name="alsIgnAngle" storage="sbyte" type="value" divider = "2"   unit="°" group="ALS" gauge="0" gaugeMin="-15" gaugeMax="15" tick="1" userName="ALS ignition angle" color="2"/>
+
+			<symbol name="alsSparkCut" storage="ubyte" type="value" divider = "1"   unit="%" group="ALS" gauge="0" gaugeMin="0" gaugeMax="1" tick="1" userName="ALS spark cut" color="2"/>
+
+			<symbol name="alsFuelCorr" storage="sbyte" type="value" divider = "1"   unit="%" group="ALS" gauge="0" gaugeMin="-100" gaugeMax="125" tick="1" userName="ALS fuel correction" color="2"/>
+
+			<symbol name="ffBlendCrankingFuel" storage="ubyte" type="value" divider = "2"   unit="%" group="Flex Fuel" gauge="0" gaugeMin="0" gaugeMax="100" tick="1" userName="FF Blend Cranking Fuel" color="3" priority="7"/>
+				
+			<symbol name="ignSparkCount"	storage="ubyte" type="value" divider = "1"   unit="" group="Ignition" gauge="0" gaugeMin="0" gaugeMax="255"  tick="10"	  userName="Executed sparks count" color="6" priority="15"/>
+			<symbol name="idleIgnCutPercent"        storage ="ubyte"  type="value" divider = "1"  unit="%" group="Idle" gauge="0" gaugeMin="0"	   gaugeMax="100"  userName="Idle ign. cut percent" color="5"/>
+
+			<symbol name="tpsVoltage"        storage ="ubyte"  type="value" divider = "51"  unit="V" group="Analog inputs" gauge="0" gaugeMin="0" gaugeMax="5"  userName="TPS Voltage" color="5" priority="8" />
+			
+			<symbol name="dbwPotError"        storage ="ubyte"  type="value" divider = "51"  unit="V" group="DBW" gauge="0" gaugeMin="0" gaugeMax="100"  userName="DBW Pot error" color="5" />
+
+			<symbol name="cel"        storage ="word"  type="paramList:checkEngine" divider = "1"  unit="" group="Other" gauge="0" gaugeMin="0" gaugeMax="65535"  userName="Check engine code" interpolate="0" color="5" channel="255"/>
+
+			<symbol name="tcdRPM"        storage ="word"	type="value" divider = "1"  unit="rpm" group="TC" gauge="0" gaugeMin="0" gaugeMax="1000"  userName="TC dRPM" color="2" priority="15"/>
+			<symbol name="tcdRPMRaw"        storage ="word"  type="value" divider = "1"  unit="rpm" group="TC" gauge="0" gaugeMin="0" gaugeMax="1000"  userName="TC dRPM Raw" color="2" priority="9"/>
+
+			<symbol name="tcTorqueReduction"  storage ="ubyte" type="value" divider = "2"  unit="%" group="TC" gauge="0" gaugeMin="0" gaugeMax="100"  userName="TC Torq. Reduction" color="5" priority="255"/>
+
+			<symbol name="ffBlendWarmup" storage="ubyte" type="value" divider = "2"   unit="%" group="Flex Fuel" gauge="0" gaugeMin="0" gaugeMax="100" tick="1" userName="FF Blend Warmup" color="3" priority="7"/>
+
+			<symbol name="ffBlendASE" storage="ubyte" type="value" divider = "2"   unit="%" group="Flex Fuel" gauge="0" gaugeMin="0" gaugeMax="100" tick="1" userName="FF Blend ASE" color="3" priority="8"/>
+
+			<symbol name="canBUSState" storage="ubyte" type="paramList:canBusState" divider = "1"   unit="" group="Other" gauge="0" gaugeMin="0" gaugeMax="3" tick="1" userName="CANBus State" color="3" priority="8"/>
+
+			<symbol name="canBUSSwitech" storage="ubyte" type="value" divider = "1"   unit="" group="Other" gauge="0" gaugeMin="0" gaugeMax="15" tick="1" userName="CAN ext. switches" color="3" priority="9"/>
+
+			<symbol name="tcAdjPos" storage="ubyte" type="value" divider = "1"   unit="" group="TC" gauge="0" gaugeMin="0" gaugeMax="15" tick="1" userName="TC adjust pos" color="5" priority="9"/>
+
+			<symbol name="trailingIgnAngle" storage="word"  type="value" divider = "2"   unit="rpm" group="Ignition" gauge="1" gaugeMin="0" gaugeMax="60"  userName="Ignition angle trail. delay" tick="10" gaugeDiv="1" color="1" priority="1" />
+
+			<symbol name="deltaFPR" storage="word"  type="value" divider = "1"   unit="kPa" group="Fueling" gauge="1" gaugeMin="100" gaugeMax="500"  userName="Fuel pressure delta" tick="50" gaugeDiv="50" color="3" channel="29" priority="50"/>
+
+			<symbol name="fprCorrection" storage="word"  type="value" divider = "1"   unit="%" group="Fueling" gauge="0" gaugeMin="100" gaugeMax="500"  userName="Fuel pressure delta correction" tick="50" gaugeDiv="50" color="3" priority="51"/>
+
+
+			<symbol name="fuelLevel" storage="ubyte"  type="value" divider = "1"  priority="17"  unit="%" group="Basic, Other" gauge="1" gaugeMin="0" gaugeMax="100"  userName="Fuel level" tick="20" gaugeDiv="1" color="2" channel="30"  redStart="10" alarm="5" alarmCond="lt"/>
+
+			<symbol name="inj1Trim" storage="ubyte"  type="value" divider = "1"  priority="60"  unit="%" group="Fueling" gauge="0" gaugeMin="50" gaugeMax="150"  userName="Injector 1 trim" tick="20" gaugeDiv="1" color="4" />
+			<symbol name="inj2Trim" storage="ubyte"  type="value" divider = "1"  priority="61"  unit="%" group="Fueling" gauge="0" gaugeMin="50" gaugeMax="150"  userName="Injector 2 trim" tick="20" gaugeDiv="1" color="4" />
+			<symbol name="inj3Trim" storage="ubyte"  type="value" divider = "1"  priority="62"  unit="%" group="Fueling" gauge="0" gaugeMin="50" gaugeMax="150"  userName="Injector 3 trim" tick="20" gaugeDiv="1" color="4" />
+			<symbol name="inj4Trim" storage="ubyte"  type="value" divider = "1"  priority="63"  unit="%" group="Fueling" gauge="0" gaugeMin="50" gaugeMax="150"  userName="Injector 4 trim" tick="20" gaugeDiv="1" color="4" />
+			<symbol name="inj5Trim" storage="ubyte"  type="value" divider = "1"  priority="64"  unit="%" group="Fueling" gauge="0" gaugeMin="50" gaugeMax="150"  userName="Injector 5 trim" tick="20" gaugeDiv="1" color="4" />
+			<symbol name="inj6Trim" storage="ubyte"  type="value" divider = "1"  priority="65"  unit="%" group="Fueling" gauge="0" gaugeMin="50" gaugeMax="150"  userName="Injector 6 trim" tick="20" gaugeDiv="1" color="4" />
+
+
+			<symbol name="canEGT1" storage="ubyte"  type="value" divider = "-4" offset="200" priority="51"  unit="°C" group="EGT" gauge="0" gaugeMin="0" gaugeMax="1224"  userName="CAN EGT #1" tick="20" gaugeDiv="1" color="4" />
+			<symbol name="canEGT2" storage="ubyte"  type="value" divider = "-4" offset="200" priority="52"  unit="°C" group="EGT" gauge="0" gaugeMin="0" gaugeMax="1224"  userName="CAN EGT #2" tick="20" gaugeDiv="1" color="4" />
+			<symbol name="canEGT3" storage="ubyte"  type="value" divider = "-4" offset="200" priority="53"  unit="°C" group="EGT" gauge="0" gaugeMin="0" gaugeMax="1224"  userName="CAN EGT #3" tick="20" gaugeDiv="1" color="4" />
+			<symbol name="canEGT4" storage="ubyte"  type="value" divider = "-4" offset="200" priority="54"  unit="°C" group="EGT" gauge="0" gaugeMin="0" gaugeMax="1224"  userName="CAN EGT #4" tick="20" gaugeDiv="1" color="4" />
+			<symbol name="canEGT5" storage="ubyte"  type="value" divider = "-4" offset="200" priority="55"  unit="°C" group="EGT" gauge="0" gaugeMin="0" gaugeMax="1224"  userName="CAN EGT #5" tick="20" gaugeDiv="1" color="4" />
+			<symbol name="canEGT6" storage="ubyte"  type="value" divider = "-4" offset="200" priority="56"  unit="°C" group="EGT" gauge="0" gaugeMin="0" gaugeMax="1224"  userName="CAN EGT #6" tick="20" gaugeDiv="1" color="4" />
+			<symbol name="canEGT7" storage="ubyte"  type="value" divider = "-4" offset="200" priority="57"  unit="°C" group="EGT" gauge="0" gaugeMin="0" gaugeMax="1224"  userName="CAN EGT #7" tick="20" gaugeDiv="1" color="4" />
+			<symbol name="canEGT8" storage="ubyte"  type="value" divider = "-4" offset="200" priority="58"  unit="°C" group="EGT" gauge="0" gaugeMin="0" gaugeMax="1224"  userName="CAN EGT #8" tick="20" gaugeDiv="1" color="4" />
+
+			<symbol name="boostDCErrCor" storage="sbyte"  type="value" divider = "1" offset="0" priority="59"  unit="" group="Boost" gauge="0" gaugeMin="-50" gaugeMax="50"  userName="Boost DC error correction" tick="20" gaugeDiv="1" color="4" />
+
+			<symbol name="knockBits" storage="word"  type="paramList:knockEventsBits" divider = "1" offset="0" priority="59"  unit="" group="Knock Sensing" gauge="0" gaugeMin="0" gaugeMax="256"  userName="Knock ignition event" interpolate="0" tick="20" gaugeDiv="1" color="4" />
+
+			<symbol name="ralTarget"    storage ="word"	type="value" divider = "1"  unit="rpm" group="LC, Gear cut, FS" gauge="0" gaugeMin="0" gaugeMax="9000"  userName="Rolling start target" color="5" />
+
+			<symbol name="ralIgnition"  storage ="ubyte" type="value" divider = "2"  unit="°" group="LC, Gear cut, FS" gauge="0" gaugeMin="0" gaugeMax="100"  userName="Rolling start ign. retard" color="5" />
+			
+			
+			<symbol name="etcFrictionCorr"	storage="sbyte" type="value" divider = "2"   unit=""   group="DBW" gauge="0" gaugeMin="-50" gaugeMax="50" tick="20" userName="DBW friction corr." color = "3" priority="5"/>
+		
+			<symbol name="wheelSpeedFL"	storage="ubyte" type="value" divider = "-2"   unit="km/h"   group="Vss and gears" gauge="0" gaugeMin="0" gaugeMax="300" tick="20" userName="Wheel speed FL" color = "4" priority="5"/>
+			<symbol name="wheelSpeedFR"	storage="ubyte" type="value" divider = "-2"   unit="km/h"   group="Vss and gears" gauge="0" gaugeMin="0" gaugeMax="300" tick="20" userName="Wheel speed FR" color = "4" priority="6"/>
+			<symbol name="wheelSpeedRL"	storage="ubyte" type="value" divider = "-2"   unit="km/h"   group="Vss and gears" gauge="0" gaugeMin="0" gaugeMax="300" tick="20" userName="Wheel speed RL" color = "4" priority="7"/>
+			<symbol name="wheelSpeedRR"	storage="ubyte" type="value" divider = "-2"   unit="km/h"   group="Vss and gears" gauge="0" gaugeMin="0" gaugeMax="300" tick="20" userName="Wheel speed RR" color = "4" priority="8"/>
+
+			<symbol name="canSwitch1" storage="ubyte:1" type="paramList:onOff" divider = "1"   unit=""   group="Switches" gauge="0" tick="20" userName="CAN Switch #1" color = "1" priority="10"/>
+			<symbol name="canSwitch2" storage="ubyte:1" type="paramList:onOff" divider = "1"   unit=""   group="Switches" gauge="0" tick="20" userName="CAN Switch #2" color = "1" priority="11"/>
+			<symbol name="canSwitch3" storage="ubyte:1" type="paramList:onOff" divider = "1"   unit=""   group="Switches" gauge="0" tick="20" userName="CAN Switch #3" color = "1" priority="12"/>
+			<symbol name="canSwitch4" storage="ubyte:1" type="paramList:onOff" divider = "1"   unit=""   group="Switches" gauge="0" tick="20" userName="CAN Switch #4" color = "1" priority="13"/>
+			<symbol name="canSwitch5" storage="ubyte:1" type="paramList:onOff" divider = "1"   unit=""   group="Switches" gauge="0" tick="20" userName="CAN Switch #5" color = "1" priority="14"/>
+			<symbol name="canSwitch6" storage="ubyte:1" type="paramList:onOff" divider = "1"   unit=""   group="Switches" gauge="0" tick="20" userName="CAN Switch #6" color = "1" priority="15"/>
+			<symbol name="canSwitch7" storage="ubyte:1" type="paramList:onOff" divider = "1"   unit=""   group="Switches" gauge="0" tick="20" userName="CAN Switch #7" color = "1" priority="16"/>
+			<symbol name="canSwitch8" storage="ubyte:1" type="paramList:onOff" divider = "1"   unit=""   group="Switches" gauge="0" tick="20" userName="CAN Switch #8" color = "1" priority="17"/>
+
+			<symbol name="acPressure" storage="word" type="value" divider = "1" unit="kPa"  group="Pressure" gauge="0" gaugeMin="0" gaugeMax="5000" tick="20" userName="AC Pressure" color = "4" priority="30"/>
+
+			<symbol name="chargeTemp" storage="sbyte" type="value" divider = "1"   unit="°C"  group="Fueling" gauge="0" gaugeMin="-40" gaugeMax="120" tick="20" userName="Charge temp" color = "4" priority="31"/>
+
+			<symbol name="lambdaTarget"     storage="ubyte"  type="value" divider = "100"   unit="λ" group="Fueling"  gauge="1" gaugeMin="0.7" gaugeMax="1.3" tick="0.1" precision="3" userName="Lambda target" color="4" priority="8" minLimit="0.6" maxLimit="2.0" channel="32"/>
+
+			<symbol name="acEvap" storage="sbyte" type="value" divider = "1"   unit="°C"  group="Temperature" gauge="0" gaugeMin="-20" gaugeMax="100" tick="20" userName="AC EVAP temp." color = "4" priority="31" />
+
+			<symbol name="scondarypulseWidth"	storage="word"   type="value" divider = "62"   unit="ms"	group="Fueling"  gauge="1" gaugeMin="0"	  gaugeMax="25" tick="5" userName="Secondary inj. PW" color="1" priority="91" channel="33"/>
+
+			<symbol name="secondaryInjDC"	storage="ubyte"  type="value" divider = "2"    unit="%" group="Fueling"  gauge="1" gaugeMin="0" gaugeMax="100"  tick="20" userName="Secondary inj. DC" color="1" priority="92" />
+			<symbol name="secondaryInjSplit"	storage="ubyte"  type="value" divider = "2"    unit="%" group="Fueling"  gauge="1" gaugeMin="0" gaugeMax="100"  tick="20" userName="Secondary injectors split" color="1" priority="93" />
+
+			<symbol name="decEnrich"	  storage="ubyte"  type="value" divider = "1"   unit="%" group="Enrichments"     gauge="0" gaugeMin="0" gaugeMax="100" userName="Dec. Enrichment" priority="6" color = "3"/>
+			<symbol name="decEnrichPW"	  storage="word"   type="value" divider = "62"   unit="ms"	group="Fueling"   gauge="1" gaugeMin="0" gaugeMax="20" tick="4" userName="Dec. Enrichment PW" color="3" priority="7"/>
+
+			<symbol name="timer1"						storage="ubyte"		type="value"	divider = "4"		unit="sec"	group="Timers"		gauge="0"		gaugeMin="0"		gaugeMax="65"		userName="Timer 1"						priority="1"		color="1"/>
+			<symbol name="timer2"						storage="ubyte"		type="value"	divider = "4"		unit="sec"	group="Timers"		gauge="0"		gaugeMin="0"		gaugeMax="65"		userName="Timer 2"						priority="2"		color="1"/>
+			<symbol name="timerFuelEnrich"	storage="ubyte"		type="value"	divider = "1"		unit="%"		group="Timers"		gauge="0"		gaugeMin="0"		gaugeMax="200"	userName="Timer fuel corr."		priority="10"		color="3"/>
+			<symbol name="timerBoostCorr"		storage="ubyte"		type="value"	divider = "1"		unit="%"		group="Timers"		gauge="0"		gaugeMin="25"		gaugeMax="200"	userName="Timer boost corr."	priority="11"		color="3"/>
+			<symbol name="timerIgnCorr"			storage="sbyte"		type="value"	divider = "2"		unit="°"		group="Timers"		gauge="0"		gaugeMin="-50"	gaugeMax="50"		userName="Timer ign. corr."		priority="12"		color="3"/>
+
+			<symbol name="nitrousFuelAdder"	 storage="ubyte"  type="value" divider = "8"    unit="ms"	group="Nitrous" gauge="0" gaugeMin="0" gaugeMax="32" tick="1" userName="Nitrous fuel adder" color="3"/>
+
+			<symbol name="mswitchState"		storage="ubyte:2"		type="paramList:mSwitchState"		divider="1"	unit=""	group="Switches"		gauge="0"	gaugeMin="0"	gaugeMax="2"	gaugeDiv="50"	userName="Momentary SW#1"		tick="50"		priority="100"	color="4"/>
+			<symbol name="mswitchState2"	storage="ubyte:2"		type="paramList:mSwitchState"		divider="1"	unit=""	group="Switches"		gauge="0"	gaugeMin="0"	gaugeMax="2"	gaugeDiv="50"	userName="Momentary SW#2"		tick="50"		priority="101"	color="4"/>
+			<symbol name="mswitchState3"	storage="ubyte:2"		type="paramList:mSwitchState"		divider="1"	unit=""	group="Switches"		gauge="0"	gaugeMin="0"	gaugeMax="2"	gaugeDiv="50"	userName="Momentary SW#3"		tick="50"		priority="102"	color="4"/>
+			<symbol name="mswitchState4"	storage="ubyte:2"		type="paramList:mSwitchState"		divider="1"	unit=""	group="Switches"		gauge="0"	gaugeMin="0"	gaugeMax="2"	gaugeDiv="50"	userName="Momentary SW#4"		tick="50"		priority="103"	color="4"/>
+
+			<symbol name="fcProbability" storage="percent7" type="value" divider = "1"   unit="%" group="Fueling" gauge="0" gaugeMin="0" gaugeMax="100"  userName="Fuel cut probability" tick="50" gaugeDiv="50" color="6" />
+			<symbol name="ffFuelScale" storage="ubyte"  type="value" divider = "1"   unit="%" group="Flex Fuel" gauge="0" gaugeMin="0" gaugeMax="200"  userName="Ethanol fuel scale" tick="50" gaugeDiv="50" color="6" />
+			<symbol name="fuelUsage" storage="word" type="value" divider = "100"   unit="l/h"	 group="Fueling"	 gauge="0" gaugeMin="0" gaugeMax="120" tick="15" userName="Fuel usage" color="1"/>
+
+			<symbol name="injectionAngle" storage="word" type="value" divider = "1"   unit="°"   group="Fueling"	 gauge="0" gaugeMin="0" gaugeMax="720" tick="90" userName="Injection angle" color="3" />
+
+			<symbol name="backPressure" storage="word" type="value" divider = "32"   unit="bar"   group="Pressure"	 gauge="0" gaugeMin="0" gaugeMax="4" tick="90" userName="Back pressure" color="2" priority="18" />
+
+			<symbol name="muxSwitch1" storage="ubyte:1"  type="paramList:onOff" divider = "1"   unit="" group="Switches" userName="MUX switch #1"  gauge="0" gaugeMin="0" gaugeMax="1" priority="30" color="2"/>
+
+			<symbol name="muxSwitch2" storage="ubyte:1"  type="paramList:onOff" divider = "1"   unit="" group="Switches"  userName="MUX switch #2" priority="31" color="2"/>
+
+			<symbol name="muxSwitch3" storage="ubyte:1"  type="paramList:onOff" divider = "1"   unit="" group="Switches"  userName="MUX switch #3" priority="32" color="2"/>
+
+			<symbol name="vtecOn"		storage="ubyte:1" type="paramList:yesNo" divider = "1"   unit=""	group="VVT" gauge="0" gaugeMin="0" gaugeMax="1" tick="1" userName="VTEC Active" color="3" priority="7"/>
+
+			<symbol name="alsActive" storage="ubyte:1" type="paramList:yesNo" divider = "1"   unit="" group="ALS" gauge="0" gaugeMin="0" gaugeMax="1" tick="0.25" userName="ALS Active" color="1"/>
+
+			<!-- BITMASK -->
+
+			<symbol name="ralActive"  storage ="ubyte:1" type="paramList:yesNo" divider = "1"  unit="" group="LC, Gear cut, FS" gauge="0" gaugeMin="0" gaugeMax="1"  userName="Rolling start active" color="5" />
+
+			<symbol name="gcActive"	storage="ubyte:1" type="paramList:yesNo" divider = "1"   unit=""	    group="LC, Gear cut, FS"	 gauge="0" gaugeMin="0" gaugeMax="1" tick="15" userName="Gear cut active" color="1"/>
+
+			<symbol name="fuelCut"		storage="ubyte:1"  type="paramList:yesNo" divider = "1"    unit=""		group="Fueling"  gauge="0" gaugeMin="0" gaugeMax="1" userName="Fuel Cut" color="1" priority="1"/>
+
+			<symbol name="idleControlActive" storage ="ubyte:1"  type="paramList:yesNo" divider = "1" unit="" group="Idle" gauge="0" gaugeMin="0"      gaugeMax="1"	   userName="Idle Control Active" priority="0" color="1"/>
+
+			<symbol name="overdwell"	storage="ubyte:1"  type="paramList:yesNo" divider = "1"    unit=""		group="Ignition" gauge="0" gaugeMin="0"	  gaugeMax="1" userName="Overdwell" color="3" priority="8"/>
+
+			<symbol name="shiftLightOn"	  storage="ubyte:1" type="paramList:yesNo" divider = "1"   unit=""      group="Vss and gears"  gauge="0" gaugeMin="0" gaugeMax="1" tick="1"	   userName="Shift Light On" priority="25" color="3"/>
+
+			<symbol name="lcActive"		  storage="ubyte:1" type="paramList:yesNo" divider = "1"   unit=""	    group="LC, Gear cut, FS"	 gauge="0" gaugeMin="0" gaugeMax="1" tick="15" priority="0" userName="LC Active" color="1"/>
+
+			<symbol name="nitrousActive"	 storage="ubyte:1"  type="paramList:yesNo" divider = "1"    unit=""	    group="Nitrous" gauge="0" gaugeMin="0" gaugeMax="1" tick="1" userName="Nitrous Active" color="1"/>
+
+			<symbol name="alsSet2"	storage="ubyte:1"  type="paramList:yesNo" divider = "1" unit="" group="ALS"  gauge="0" gaugeMin="0" gaugeMax="100"  tick="20" userName="ALS set #2" color="1" priority="94" />
+
+			<symbol name="dbwChar2"	storage="ubyte:1"  type="paramList:yesNo" divider = "1" unit="" group="DBW"  gauge="0" gaugeMin="0" gaugeMax="100"  tick="20" userName="DBW characteristic #2" color="1" priority="95" />
+
+			<symbol name="fuelCorrASE"	storage="ubyte:1"  type="paramList:yesNo" userName="F.ASE correction" divider = "1" unit="" group="Fuel active corr."  gauge="0" color="1" priority="94" />
+
+			<symbol name="fuelCorrWarmup"	storage="ubyte:1"  type="paramList:yesNo" userName="F.Warmup correction" divider = "1" unit="" group="Fuel active corr."  gauge="0" color="1" priority="94" />
+
+			<symbol name="fuelCorrIAT"	storage="ubyte:1"  type="paramList:yesNo" userName="F.IAT correction" divider = "1" unit="" group="Fuel active corr."  gauge="0" color="1" priority="94" />
+
+			<symbol name="fuelCorrEGT"	storage="ubyte:1"  type="paramList:yesNo" userName="F.EGT correction" divider = "1" unit="" group="Fuel active corr."  gauge="0" color="1" priority="94" />
+
+			<symbol name="fuelCorrTPSMAP"	storage="ubyte:1"  type="paramList:yesNo" userName="F.Custom correction" divider = "1" unit="" group="Fuel active corr."  gauge="0" color="1" priority="100" />
+
+			<symbol name="fuelCorrBARO"	storage="ubyte:1"  type="paramList:yesNo" userName="F.BARO correction" divider = "1" unit="" group="Fuel active corr."  gauge="0" color="1" priority="94" />
+
+			<symbol name="fuelCorrFPR"	storage="ubyte:1"  type="paramList:yesNo" userName="F.FPR correction" divider = "1" unit="" group="Fuel active corr."  gauge="0" color="1" priority="94" />
+
+			<symbol name="fuelCorrFTemp"	storage="ubyte:1"  type="paramList:yesNo" userName="F.Fuel temp. correction" divider = "1" unit="" group="Fuel active corr."  gauge="0" color="1" priority="94" />
+
+			<symbol name="fuelCorrALS"	storage="ubyte:1"  type="paramList:yesNo" userName="F.ALS correction" divider = "1" unit="" group="Fuel active corr."  gauge="0" color="1" priority="94" />
+
+			<symbol name="fuelCorrKS"	storage="ubyte:1"  type="paramList:yesNo" userName="F.Knock correction" divider = "1" unit="" group="Fuel active corr."  gauge="0" color="1" priority="94" />
+
+			<symbol name="fuelCorrLC"	storage="ubyte:1"  type="paramList:yesNo" userName="F.LC correction" divider = "1" unit="" group="Fuel active corr."  gauge="0" color="1" priority="94" />
+
+			<symbol name="fuelCorrDecc"	storage="ubyte:1"  type="paramList:yesNo" userName="F.Decelerate correction" divider = "1" unit="" group="Fuel active corr."  gauge="0" color="1" priority="94" />
+
+			<symbol name="fuelCorrAcc"	storage="ubyte:1"  type="paramList:yesNo" userName="F.Accelerate correction" divider = "1" unit="" group="Fuel active corr."  gauge="0" color="1" priority="94" />
+
+			<symbol name="fuelCorrFC"	storage="ubyte:1"  type="paramList:yesNo" userName="F.Fuel cut" divider = "1" unit="" group="Fuel active corr."  gauge="0" color="1" priority="94" />
+
+			<symbol name="fuelCorrEGO"	storage="ubyte:1"  type="paramList:yesNo" userName="F.EGO correction" divider = "1" unit="" group="Fuel active corr."  gauge="0" color="1" priority="94" />
+
+			<symbol name="fuelCorrFS"	storage="ubyte:1"  type="paramList:yesNo" userName="F.Flat shift correction" divider = "1" unit="" group="Fuel active corr."  gauge="0" color="1" priority="94" />
+
+			<symbol name="fuelTimerCorr" storage="ubyte:1"  type="paramList:yesNo" userName="F.Timer correction" divider = "1" unit="" group="Fuel active corr."  gauge="0" color="1" priority="94" />
+
+			<symbol name="ignIdlCorr"	storage="ubyte:1"  type="paramList:yesNo" userName="I.Idle correction" divider = "1" unit="" group="Ignition active corr."  gauge="0" color="1" priority="94" />
+
+			<symbol name="ignKSCorr"	storage="ubyte:1"  type="paramList:yesNo" userName="I.KS correction" divider = "1" unit="" group="Ignition active corr."  gauge="0" color="1" priority="94" />
+
+			<symbol name="ignCltCorr"	storage="ubyte:1"  type="paramList:yesNo" userName="I.CLT correction" divider = "1" unit="" group="Ignition active corr."  gauge="0" color="1" priority="94" />
+
+			<symbol name="ignLCCorr"	storage="ubyte:1"  type="paramList:yesNo" userName="I.LC correction" divider = "1" unit="" group="Ignition active corr."  gauge="0" color="1" priority="94" />
+
+			<symbol name="ignSRLCorr"	storage="ubyte:1"  type="paramList:yesNo" userName="I.Soft rev limiter correction" divider = "1" unit="" group="Ignition active corr."  gauge="0" color="1" priority="94" />
+
+			<symbol name="ignNitrousCorr"	storage="ubyte:1"  type="paramList:yesNo" userName="I.Nitrous correction" divider = "1" unit="" group="Ignition active corr."  gauge="0" color="1" priority="94" />
+
+			<symbol name="ignAccEnrichCorr"	storage="ubyte:1"  type="paramList:yesNo" userName="I.Acc enrich correction" divider = "1" unit="" group="Ignition active corr."  gauge="0" color="1" priority="94" />
+
+			<symbol name="ignTPSMAPCorr"	storage="ubyte:1"  type="paramList:yesNo" userName="I.Custom correction" divider = "1" unit="" group="Ignition active corr."  gauge="0" color="1" priority="94" />
+
+			<symbol name="ignPitLimitCorr"	storage="ubyte:1"  type="paramList:yesNo" userName="I.Pit limit correction" divider = "1" unit="" group="Ignition active corr."  gauge="0" color="1" priority="94" />
+
+			<symbol name="ignRLCCorr"	storage="ubyte:1"  type="paramList:yesNo" userName="I.Rolling LC correction" divider = "1" unit="" group="Ignition active corr."  gauge="0" color="1" priority="94" />
+
+			<symbol name="ignLockCorr"	storage="ubyte:1"  type="paramList:yesNo" userName="I.Ignition angle lock" divider = "1" unit="" group="Ignition active corr."  gauge="0" color="1" priority="94" />
+
+			<symbol name="ignALSCorr"	storage="ubyte:1"  type="paramList:yesNo" userName="I.ALS correction" divider = "1" unit="" group="Ignition active corr."  gauge="0" color="1" priority="94" />
+
+			<symbol name="ignIATCorr"	storage="ubyte:1"  type="paramList:yesNo" userName="I.IAT correction" divider = "1" unit="" group="Ignition active corr."  gauge="0" color="1" priority="94" />
+
+			<symbol name="ignFSCorr"	storage="ubyte:1"  type="paramList:yesNo" userName="I.FS correction" divider = "1" unit="" group="Ignition active corr."  gauge="0" color="1" priority="94" />
+
+			<symbol name="ignTimerCorr"	storage="ubyte:1"  type="paramList:yesNo" userName="I.Timer correction" divider = "1" unit="" group="Ignition active corr."  gauge="0" color="1" priority="94" />
+
+			<symbol name="ignSyncStatus"  storage="ubyte:2"  type="paramList:emuIgnStatus" divider = "1" unit="" group="Ignition" gauge="0" gaugeMin="0" gaugeMax="2" tick="1" userName="Trigger sync status" interpolate="0" color="5" priority="12"/>
+
+			<symbol name="EMUState"     storage="ubyte:3" type="paramList:emuState" divider="1"   unit=""    group="Basic" priority="19" color="3" gauge="0" gaugeMin="0"   gaugeMax="6"  tick="1" userName="ECU State" interpolate="0"/>
+
+			<symbol name="switchState1" storage="ubyte:1"  type="paramList:onOff" divider = "1"   unit="" group="Switches" gauge="0" userName="Switch #1" tick="50" gaugeDiv="50" color="3" priority="0"/>
+
+			<symbol name="switchState2" storage="ubyte:1"  type="paramList:onOff" divider = "1"   unit="" group="Switches" gauge="0" userName="Switch #2" tick="50" gaugeDiv="50" color="3" priority="1"/>
+
+			<symbol name="switchState3" storage="ubyte:1"  type="paramList:onOff" divider = "1"   unit="" group="Switches" gauge="0" userName="Switch #3" tick="50" gaugeDiv="50" color="3" priority="2"/>
+
+			<symbol name="pitLimiterActive"		storage="ubyte:1"  type="paramList:yesNo"	 divider = "1"   unit=""	group="Other" gauge="0" gaugeMin="0" gaugeMax="2" tick="1" userName="Pit limiter active" interpolate="0" priority="14" color="4"/>
+
+			<symbol name="camSyncPresent"	   storage="ubyte:1"  type="paramList:yesNo"		divider = "1"   unit=""	group="Ignition" gauge="0" gaugeMin="0" gaugeMax="2" tick="1" userName="Cam signal present" interpolate="0" color="4" priority="10"/>
+
+			<symbol name="cam2Present"			storage="ubyte:1"  type="paramList:yesNo"	 divider = "1"   unit=""	group="Ignition" gauge="0" gaugeMin="0" gaugeMax="2" tick="1" userName="Cam #2 signal present" interpolate="0" color="4" priority="11"/>
+
+			<symbol name="acClutch" storage="ubyte:1" type="paramList:yesNo" divider = "1"   unit=""  group="Other" gauge="0" gaugeMin="0" gaugeMax="2" tick="20" userName="AC Clutch" color = "4" priority="31" interpolate="0"/>
+
+			<symbol name="tablesSet"		storage="ubyte:2" type="value" divider = "1"   unit="" group="Basic" priority="25" color="4" gauge="0" gaugeMin="0" gaugeMax="1" tick="1" userName="Tables set" channel="31"/>
+
+			<symbol name="fuelCorrMAPRPM"	storage="ubyte:1"  type="paramList:yesNo" userName="F.MAP/RPM correction" divider = "1" unit="" group="Fuel active corr."  gauge="0" color="1" priority="94" />
+
+			<symbol name="fuelCorrTPSRPM"	storage="ubyte:1"  type="paramList:yesNo" userName="F.TPS/RPM correction" divider = "1" unit="" group="Fuel active corr."  gauge="0" color="1" priority="94" />
+
+			<symbol name="parametricOutput1"   storage="ubyte:1"  type="paramList:outputState" divider = "1"  unit=""	group="Outputs" gauge="0" gaugeMin="0" gaugeMax="2" tick="1" userName="Param. Output #1" interpolate="0" priority="10" color="3"/>
+
+			<symbol name="parametricOutput2"   storage="ubyte:1"  type="paramList:outputState" divider = "1"  unit=""	group="Outputs" gauge="0" gaugeMin="0" gaugeMax="2" tick="1" userName="Param. Output #2" interpolate="0" priority="10" color="3"/>
+
+			<symbol name="parametricOutput3"   storage="ubyte:1"  type="paramList:outputState" divider = "1"  unit=""	group="Outputs" gauge="0" gaugeMin="0" gaugeMax="2" tick="1" userName="Param. Output #3" interpolate="0" priority="10" color="3"/>
+
+			<symbol name="parametricOutput4"   storage="ubyte:1"  type="paramList:outputState" divider = "1"  unit=""	group="Outputs" gauge="0" gaugeMin="0" gaugeMax="2" tick="1" userName="Param. Output #4" interpolate="0" priority="10" color="3"/>
+
+			<symbol name="parametricOutput5"   storage="ubyte:1"  type="paramList:outputState" divider = "1"  unit=""	group="Outputs" gauge="0" gaugeMin="0" gaugeMax="2" tick="1" userName="Param. Output #5" interpolate="0" priority="10" color="3"/>
+
+			<symbol name="virtualOutput1"   storage="ubyte:1"  type="paramList:outputState" divider = "1"  unit=""	group="Outputs" gauge="0" gaugeMin="0" gaugeMax="2" tick="1" userName="Virtual Output #1" interpolate="0" priority="10" color="2"/>
+		
+			<symbol name="virtualOutput2"   storage="ubyte:1"  type="paramList:outputState" divider = "1"  unit=""	group="Outputs" gauge="0" gaugeMin="0" gaugeMax="2" tick="1" userName="Virtual Output #2" interpolate="0" priority="10" color="2"/>
+
+			<symbol name="virtualOutput3"   storage="ubyte:1"  type="paramList:outputState" divider = "1"  unit=""	group="Outputs" gauge="0" gaugeMin="0" gaugeMax="2" tick="1" userName="Virtual Output #3" interpolate="0" priority="10" color="2"/>
+
+			<symbol name="cfanOutput"   storage="ubyte:1"  type="paramList:outputState" divider = "1"  unit=""	group="Outputs" gauge="0" gaugeMin="0" gaugeMax="2" tick="1" userName="Coolant fan" interpolate="0" priority="10" color="1"/>
+
+			<symbol name="fpumpOutput"   storage="ubyte:1"  type="paramList:outputState" divider = "1"  unit=""	group="Outputs" gauge="0" gaugeMin="0" gaugeMax="2" tick="1" userName="Fuel pump" interpolate="0" priority="10" color="1"/>
+
+			<symbol name="lcSet2"	storage="ubyte:1"  type="paramList:yesNo" divider = "1" unit="" group="LC, Gear cut, FS"  gauge="0" gaugeMin="0" gaugeMax="1"  tick="20" userName="LC set #2" color="1" priority="94" />
+
+			<symbol name="lgFuelCorrection"	storage="ubyte:1"  type="paramList:yesNo" divider = "1" unit="" group="Fuel active corr."  gauge="0" gaugeMin="0" gaugeMax="1"  tick="20" userName="F. Lambda guard" color="1" priority="94" />
+			<symbol name="lgIgnCorrection"	storage="ubyte:1"  type="paramList:yesNo" divider = "1" unit="" group="Ignition active corr."  gauge="0" gaugeMin="0" gaugeMax="1"  tick="20" userName="I. Lambda guard" color="1" priority="94" />
+			<symbol name="lgBoostCorrection"	storage="ubyte:1"  type="paramList:yesNo" divider = "1" unit="" group="Boost"  gauge="0" gaugeMin="0" gaugeMax="1"  tick="20" userName="Boost lambda guard corr." color="1" priority="94" />
+			<symbol name="lgDBWCorrection"	storage="ubyte:1"  type="paramList:yesNo" divider = "1" unit="" group="Boost"  gauge="0" gaugeMin="0" gaugeMax="1"  tick="20" userName="DBW Lambda guard corr." color="1" priority="94" />
+			<symbol name="lgActive"	storage="ubyte:1"  type="paramList:yesNo" divider = "1" unit="" group="Fueling"  gauge="0" gaugeMin="0" gaugeMax="1"  tick="20" userName="Lambda guard active" color="1" priority="94" />
+
+			<symbol name="lcSparkCut"	  storage="ubyte" type="value" divider = "1"   unit="%"	    group="LC, Gear cut, FS"	 gauge="1" gaugeMin="0" gaugeMax="100"  tick="20" userName="LC spark cut" priority="2" color="1"/>
+
+			<symbol name="boostTablesBlend"	 storage="ubyte" type="value" divider = "1"   unit="%"	    group="Boost"	 gauge="1" gaugeMin="0" gaugeMax="2"  tick="20" userName="Tables blend" priority="24" color="1"/>
+
+			<symbol name="fcrRevLimiter"	storage="ubyte:1"  type="paramList:yesNo" divider = "1" unit="" group="FC reason"  gauge="0" gaugeMin="0" gaugeMax="1"  tick="20" userName="Rev limiter" color="1" priority="1" />
+			<symbol name="fcrOverrun"	storage="ubyte:1"  type="paramList:yesNo" divider = "1" unit="" group="FC reason"  gauge="0" gaugeMin="0" gaugeMax="1"  tick="20" userName="Overrun fuel cut" color="1"  priority="2"/>
+			<symbol name="fcrCLTProt"	storage="ubyte:1"  type="paramList:yesNo" divider = "1" unit="" group="FC reason"  gauge="0" gaugeMin="0" gaugeMax="1"  tick="20" userName="CLT protection " color="1"  priority="3"/>
+			<symbol name="fcrOilProt"	storage="ubyte:1"  type="paramList:yesNo" divider = "1" unit="" group="FC reason"  gauge="0" gaugeMin="0" gaugeMax="1"  tick="20" userName="Oil press. protection" color="1"  priority="4"/>
+			<symbol name="fcrStuckThrottleProt"	storage="ubyte:1"  type="paramList:yesNo" divider = "1" unit="" group="FC reason"  gauge="0" gaugeMin="0" gaugeMax="1"  tick="20" userName="Stuck throttle protection" color="1" priority="5" />
+			<symbol name="fcrFRP"	storage="ubyte:1"  type="paramList:yesNo" divider = "1" unit="" group="FC reason"  gauge="0" gaugeMin="0" gaugeMax="1"  tick="20" userName="Fuel pressure protection" color="1"  priority="6"/>
+			<symbol name="fcrOilTemp"	storage="ubyte:1"  type="paramList:yesNo" divider = "1" unit="" group="FC reason"  gauge="0" gaugeMin="0" gaugeMax="1"  tick="20" userName="Oil temperature protection" color="1" priority="7" />
+			<symbol name="fcrPitlitmi"	storage="ubyte:1"  type="paramList:yesNo" divider = "1" unit="" group="FC reason"  gauge="0" gaugeMin="0" gaugeMax="1"  tick="20" userName="Pit limiter" color="1" priority="8"/>
+			<symbol name="fcrFlatShift"	storage="ubyte:1"  type="paramList:yesNo" divider = "1" unit="" group="FC reason"  gauge="0" gaugeMin="0" gaugeMax="1"  tick="20" userName="Flat shift" color="1"  priority="9"/>
+			<symbol name="fcrGearCut"	storage="ubyte:1"  type="paramList:yesNo" divider = "1" unit="" group="FC reason"  gauge="0" gaugeMin="0" gaugeMax="1"  tick="20" userName="Gear cut" color="1"  priority="10"/>
+			<symbol name="fcrIdle"	storage="ubyte:1"  type="paramList:yesNo" divider = "1" unit="" group="FC reason"  gauge="0" gaugeMin="0" gaugeMax="1"  tick="20" userName="Idle" color="1"  priority="11"/>
+			<symbol name="fcrPerInj"	storage="ubyte:1"  type="paramList:yesNo" divider = "1" unit="" group="FC reason, Fueling"  gauge="0" gaugeMin="0" gaugeMax="1"  tick="20" userName="Per injector FC" color="1"  priority="12"/>
+			<symbol name="fcrLC"	storage="ubyte:1"  type="paramList:yesNo" divider = "1" unit="" group="FC reason"  gauge="0" gaugeMin="0" gaugeMax="1"  tick="20" userName="Launch control" color="1"  priority="13"/>
+			<symbol name="fcrStartStop"	storage="ubyte:1"  type="paramList:yesNo" divider = "1" unit="" group="FC reason"  gauge="0" gaugeMin="0" gaugeMax="1"  tick="20" userName="Start/Stop" color="1"  priority="14"/>
+			<symbol name="fcrOverPressure"	storage="ubyte:1"  type="paramList:yesNo" divider = "1" unit="" group="FC reason"  gauge="0" gaugeMin="0" gaugeMax="1"  tick="20" userName="Over pressure" color="1"  priority="15"/>
+
+			<symbol name="realTimeAutoTune"	storage="ubyte:1"  type="paramList:yesNo" divider = "1" unit="" group="Other"  gauge="0" gaugeMin="0" gaugeMax="1"  tick="20" userName="Real time autotune active" color="1"  priority="16"/>
+
+			<symbol name="CANain1" storage="ubyte"  type="value" divider = "51"  priority="11"  unit="V" group="Analog inputs" gauge="1" gaugeMin="0" gaugeMax="5"  userName="CAN Analog #1" tick="1" gaugeDiv="1" color="3" />
+			<symbol name="CANain2" storage="ubyte"  type="value" divider = "51"  priority="12"  unit="V" group="Analog inputs" gauge="1" gaugeMin="0" gaugeMax="5"  userName="CAN Analog #2" tick="1" gaugeDiv="1" color="3" />
+			<symbol name="CANain3" storage="ubyte"  type="value" divider = "51"  priority="13"  unit="V" group="Analog inputs" gauge="1" gaugeMin="0" gaugeMax="5"  userName="CAN Analog #3" tick="1" gaugeDiv="1" color="3" />
+			<symbol name="CANain4" storage="ubyte"  type="value" divider = "51"  priority="14"  unit="V" group="Analog inputs" gauge="1" gaugeMin="0" gaugeMax="5"  userName="CAN Analog #4" tick="1" gaugeDiv="1" color="3" />
+			<symbol name="CANain5" storage="ubyte"  type="value" divider = "51"  priority="15"  unit="V" group="Analog inputs" gauge="1" gaugeMin="0" gaugeMax="5"  userName="CAN Analog #5" tick="1" gaugeDiv="1" color="3" />
+			<symbol name="CANain6" storage="ubyte"  type="value" divider = "51"  priority="16"  unit="V" group="Analog inputs" gauge="1" gaugeMin="0" gaugeMax="5"  userName="CAN Analog #6" tick="1" gaugeDiv="1" color="3" />
+			<symbol name="CANain7" storage="ubyte"  type="value" divider = "51"  priority="17"  unit="V" group="Analog inputs" gauge="1" gaugeMin="0" gaugeMax="5"  userName="CAN Analog #7" tick="1" gaugeDiv="1" color="3" />
+			<symbol name="CANain8" storage="ubyte"  type="value" divider = "51"  priority="18"  unit="V" group="Analog inputs" gauge="1" gaugeMin="0" gaugeMax="5"  userName="CAN Analog #8" tick="1" gaugeDiv="1" color="3" />
+
+			<symbol name="canSwitch9"		storage="ubyte:1" type="paramList:onOff" divider = "1"   unit=""   group="Switches" gauge="0" tick="20" userName="CAN Switch #9" color = "1" priority="18"/>
+			<symbol name="canSwitch10"	storage="ubyte:1" type="paramList:onOff" divider = "1"   unit=""   group="Switches" gauge="0" tick="20" userName="CAN Switch #10" color = "1" priority="19"/>
+			<symbol name="canSwitch11"	storage="ubyte:1" type="paramList:onOff" divider = "1"   unit=""   group="Switches" gauge="0" tick="20" userName="CAN Switch #11" color = "1" priority="20"/>
+			<symbol name="canSwitch12"	storage="ubyte:1" type="paramList:onOff" divider = "1"   unit=""   group="Switches" gauge="0" tick="20" userName="CAN Switch #12" color = "1" priority="21"/>
+			<symbol name="canSwitch13"	storage="ubyte:1" type="paramList:onOff" divider = "1"   unit=""   group="Switches" gauge="0" tick="20" userName="CAN Switch #13" color = "1" priority="22"/>
+			<symbol name="canSwitch14"	storage="ubyte:1" type="paramList:onOff" divider = "1"   unit=""   group="Switches" gauge="0" tick="20" userName="CAN Switch #14" color = "1" priority="23"/>
+			<symbol name="canSwitch15"	storage="ubyte:1" type="paramList:onOff" divider = "1"   unit=""   group="Switches" gauge="0" tick="20" userName="CAN Switch #15" color = "1" priority="24"/>
+			<symbol name="canSwitch16"	storage="ubyte:1" type="paramList:onOff" divider = "1"   unit=""   group="Switches" gauge="0" tick="20" userName="CAN Switch #16" color = "1" priority="25"/>
+
+			<symbol name="preICTemperature"						storage="sbyte"	type="value"	divider = "1"		unit="°C"		group="Temperature"	gauge="1" gaugeMin="-40"	gaugeMax="160"	tick="20"	offset="60"	precision="0"		userName="Pre IC air temp"								channel=""	redStart="70"		alarm="90"	alarmCond="gt"	priority="2"	color="3"/>
+			<symbol name="powerSteeringTemperature"		storage="sbyte"	type="value"	divider = "1"		unit="°C"		group="Temperature"	gauge="1" gaugeMin="-40"	gaugeMax="160"	tick="20"	offset="60"	precision="0"		userName="Power steering fluid temp"			channel=""	redStart="70"		alarm="90"	alarmCond="gt"	priority="3"	color="1"/>
+			<symbol name="gearBoxOilTemp"							storage="ubyte"	type="value"	divider = "1"		unit="°C"		group="Temperature"	gauge="1" gaugeMin="0"		gaugeMax="160"	tick="20"							precision="0"		userName="Gearbox oil temperature"				channel=""	redStart="135"	alarm="140"	alarmCond="gt"	priority="4"	color="4"/>
+			<symbol name="diffOilTemp"								storage="ubyte"	type="value"	divider = "1"		unit="°C"		group="Temperature"	gauge="1" gaugeMin="0"		gaugeMax="160"	tick="20"							precision="0"		userName="Differential oil temperature"		channel=""	redStart="135"	alarm="140"	alarmCond="gt"	priority="5"	color="5"/>
+			<symbol name="diffOilPressure"						storage="ubyte"	type="value"	divider = "8"		unit="bar"	group="Pressure"		gauge="0" gaugeMin="0"		gaugeMax="32"		tick="16"							precision="0"		userName="Differential oil pressure"			channel=""	redStart="135"	alarm="140"	alarmCond="gt"	priority="5"	color="5"/>
+
+			<symbol name="difCtrlActive" storage="ubyte:1" type="paramList:yesNo" divider = "1"   unit=""   group="Diff control" gauge="0" tick="20" userName="Diff ctrl active" color = "1" priority="1"/>
+			<symbol name="difCtrlPumpActive" storage="ubyte:1" type="paramList:yesNo" divider = "1"   unit=""   group="Diff control" gauge="0" tick="20" userName="Diff ctrl oil pump active" color = "2" priority="2"/>
+			<symbol name="difCtrlActiveTable" storage="ubyte:2" type="value" divider = "1"   unit=""   group="Diff control" gauge="0" tick="20" userName="Diff ctrl active table" color = "3" priority="3"/>
+
+			<symbol name="ignGearCutSparkCutActive" storage="ubyte:1" type="paramList:yesNo" divider = "1"   unit=""   group="Ignition active corr." gauge="0" tick="20" userName="I. Gear cut spark cut" color = "1"/>
+			<symbol name="ignSparkCutActive" storage="ubyte:1" type="paramList:yesNo" divider = "1"   unit=""   group="Ignition active corr." gauge="0" tick="20" userName="I. Spark cut active" color = "1" />
+
+			<symbol name="brakeSwitch" storage="ubyte:1" type="paramList:yesNo" divider = "1"   unit=""   group="Other" gauge="0" tick="20" userName="Brake switch" color = "2" />
+
+			<symbol name="fcrOverboost"	storage="ubyte:1"  type="paramList:yesNo" divider = "1" unit="" group="FC reason"  gauge="0" gaugeMin="0" gaugeMax="1"  tick="20" userName="Overboost" color="1"  priority="10"/>
+
+			<symbol name="steeringAngle" storage="sword" type="value" divider = "2"   unit="°"   group="Other"	 gauge="0" gaugeMin="-1000" gaugeMax="1000" tick="30" userName="Steering wheel angle" color="4"/>
+
+			<symbol name="yawRate" storage="sbyte" type="value" divider = "2"   unit="°/s"   group="Other"	 gauge="0" gaugeMin="-63" gaugeMax="63" tick="10" userName="Yaw Rate" color="3"/>
+
+			<symbol name="lateralG" storage="sbyte" type="value" divider = "64"   unit="g"   group="Other"	 gauge="0" gaugeMin="-2" gaugeMax="2" tick="90" userName="Lateral G" color="3"/>
+
+			<symbol name="wbo2Lambda"	  storage="ubyte"  type="value" divider = "128"   unit="λ"	group="WBO"   gauge="1" gaugeMin="0.5" gaugeMax="1.3" tick="0.121" precision="3" userName="Lambda 2" color="2"  minLimit="0.6" maxLimit="2.0"/>
+
+			<symbol name="wbo2AFR"		  storage="ubyte"  type="value" divider = "10"   unit="AFR"	group="WBO"  gauge="1" gaugeMin="10" gaugeMax="20" tick="2" userName="AFR 2" color="2"/>
+
+			<symbol name="gpsSpeed" storage="ubyte" type="value" divider = "-2"   unit="km/h"   group="Vss and gears"	 gauge="0" gaugeMin="0" gaugeMax="400" tick="100" userName="GPS speed" color="1" priority="253"/>
+
+			<symbol name="fcrEthanolContent"	storage="ubyte:1"  type="paramList:yesNo" divider = "1" unit="" group="FC reason"  gauge="0" gaugeMin="0" gaugeMax="1"  tick="20" userName="Ethanol content" color="1"  priority="10"/>
+
+			<symbol name="ainIgnTrim"	storage="ubyte:1"  type="paramList:yesNo" divider = "1" unit="" group="Ignition active corr."  gauge="0" gaugeMin="0" gaugeMax="1"  tick="20" userName="I. Analog in trim" color="1" priority="94" />
+
+			<symbol name="fuelCorrResume"	storage="ubyte:1"  type="paramList:yesNo" divider = "1" unit="" group="Fuel active corr."  gauge="0" gaugeMin="0" gaugeMax="1"  tick="20" userName="F. Fuel resume" color="1" priority="94" />
+
+			<symbol name="paddleShiftUp"	storage="ubyte:1"  type="paramList:yesNo" divider = "1" unit="" group="LC, Gear cut, FS"  gauge="0" gaugeMin="0" gaugeMax="1"  tick="20" userName="Paddle up" color="2" priority="194" />
+
+			<symbol name="paddleShiftDown"	storage="ubyte:1"  type="paramList:yesNo" divider = "1" unit="" group="LC, Gear cut, FS"  gauge="0" gaugeMin="0" gaugeMax="1"  tick="20" userName="Paddle down" color="2" priority="195" />
+
+			<symbol name="clutchPedal"	storage="ubyte:1"  type="paramList:yesNo" divider = "1" unit="" group="LC, Gear cut, FS"  gauge="0" gaugeMin="0" gaugeMax="1"  tick="20" userName="Clutch pedal pressed" color="2" priority="195" />
+
+			<symbol name="cam2Swtich"	storage="ubyte:1"  type="paramList:onOff" divider = "1" unit="" group="Switches"  gauge="0" gaugeMin="0" gaugeMax="1"  tick="20" userName="CAM#2 switch" color="3" priority="255" />
+
+			<symbol name="tcIntervention"	storage="ubyte:1"  type="paramList:yesNo" divider = "1" unit="" group="TC"  gauge="0" gaugeMin="0" gaugeMax="1"  tick="20" userName="TC intervention" color="3" priority="5" />
+
+
+			<symbol name="ignAnalogInTrim" storage="sbyte" type="value" divider = "2"   unit="°"   group="Ignition"	 gauge="0" gaugeMin="-4" gaugeMax="4" tick="90" userName="Ignition analog in trim" color="3"/>
+
+			<symbol name="drivenSpeed"  storage="word"   type="value" divider = "16"  unit="km/h"	group="Vss and gears, TC" gauge="0" gaugeMin="0" gaugeMax="350" tick="2" userName="Driven axle speed" color="3" priority="254"/>
+
+			<symbol name="tcSlip"  storage="ubyte"   type="value" divider = "5"  unit=""	group="TC" gauge="0" gaugeMin="0" gaugeMax="50" tick="2" userName="TC slip" color="1"/>
+
+			<symbol name="tcSlipTarget"  storage="ubyte"   type="value" divider = "5"  unit="%"	group="TC" gauge="0" gaugeMin="0" gaugeMax="200" tick="2" userName="TC slip target" color="1"/>
+
+			<symbol name="dsgClutchEngaged"	storage="ubyte:1"	type="paramList:disengagedEngaged"	divider="1"		unit=""		group="AT"							gauge="0"	gaugeMin="0"	gaugeMax="1"	tick="1"	userName="AT clutch"				color="1"	interpolate="0"/>
+			<symbol name="dsgClutchError"	storage="ubyte:1"	type="paramList:yesNo"				divider="1"		unit=""		group="AT"							gauge="0"	gaugeMin="0"	gaugeMax="1"	tick="1"	userName="AT clutch error"			color="1"	interpolate="0" />	
+			<symbol name="dsgFault"	 		storage="ubyte:1"	type="paramList:yesNo"				divider="1"		unit=""		group="AT"							gauge="0"	gaugeMin="0"	gaugeMax="1"	tick="1"	userName="AT fault"					color="1"	interpolate="0"/>
+			<symbol name="dsgTorqueRed"		storage="ubyte:1"	type="paramList:yesNo"				divider="1"		unit=""		group="AT"							gauge="0"	gaugeMin="0"	gaugeMax="1"	tick="1"	userName="AT torque reduction"		color="1"	interpolate="0"/>
+			<symbol name="dsgBlip"			storage="ubyte:1"	type="paramList:yesNo"				divider="1"		unit=""		group="AT"							gauge="0"	gaugeMin="0"	gaugeMax="1"	tick="1"	userName="AT blip"					color="1"	interpolate="0"/>
+			<symbol name="dsgShiftUp"		storage="ubyte:1"	type="paramList:yesNo"				divider="1"		unit=""		group="AT"							gauge="0"	gaugeMin="0"	gaugeMax="1"	tick="1"	userName="AT shift up"				color="1"	interpolate="0"/>
+			<symbol name="dsgShiftDown"		storage="ubyte:1"	type="paramList:yesNo"				divider="1"		unit=""		group="AT"							gauge="0"	gaugeMin="0"	gaugeMax="1"	tick="1"	userName="AT shift down"			color="1"	interpolate="0"/>
+			<symbol name="dsgIgnCorr"		storage="ubyte:1"	type="paramList:yesNo"				divider="1"		unit=""		group="AT, Ignition active corr."	gauge="0"	gaugeMin="0"	gaugeMax="1"	tick="1"	userName="I.AT correction"			color="1"	interpolate="0"	priority="94" />
+	  		<symbol name="dsgNextGear"		storage="ubyte:4"	type="value"						divider="1"		unit=""		group="AT"							gauge="0"	gaugeMin="-1"	gaugeMax="7"	tick="2"	userName="AT next gear"				color="2"	interpolate="0"/>
+			<symbol name="dsgMode"			storage="ubyte:4"	type="paramList:atModeList"			divider="1"		unit=""		group="AT"							gauge="0"	gaugeMin="0"	gaugeMax="15"	tick="2"	userName="AT mode"					color="2"	interpolate="0"/>
+			<symbol name="dsgTargetTorque"	storage="ubyte"		type="value"						divider="1"		unit="%"	group="AT"							gauge="0"	gaugeMin="0"	gaugeMax="100"	tick="2"	userName="AT target torque %"		color="3"/>
+			<symbol name="actualTorque"	    storage="sbyte"		type="value"						divider="1"		unit="%"	group="AT"							gauge="0"	gaugeMin="-100"	gaugeMax="100"	tick="1"	userName="Engine torque %"	redStart="90" alarm="95" alarmCond="gt" color="3"/>
+			<symbol name="dsgTargetRPM"		storage="ubyte"		type="value"						divider="-25"	unit="rpm"	group="AT"							gauge="0"	gaugeMin="0"	gaugeMax="9000" tick="1000"	userName="AT rpm target"			color="3"/>
+			<symbol name="dsgSyncTime"		storage="ubyte"		type="value"						divider="-20"	unit="ms"	group="AT"							gauge="0"	gaugeMin="0"	gaugeMax="5200" tick="200"	userName="AT shift time"			color="3"/>
+			
+			<symbol name="espTargetTorque"	storage="percent7"	type="value"						divider="1"		unit="%"	group="TC"							gauge="0"	gaugeMin="0"	gaugeMax="128"	tick="1"	userName="ESP target torque %"		color="4"/>
+			<symbol name="fuelCorrDSG"	    storage="ubyte:1"	type="paramList:yesNo"				divider="1"		unit=""		group="AT, Fuel active corr."		gauge="0"	gaugeMin="0"	gaugeMax="1"	tick="1"	userName="F.AT correction"			color="1"	interpolate="0"	priority="99" />
+			<symbol name="espTorqueRed"		storage="ubyte:1"	type="paramList:yesNo"				divider="1"		unit=""		group="TC"							gauge="0"	gaugeMin="0"	gaugeMax="1"	tick="1"	userName="ESP torque reduction"			color="4"	interpolate="0"/>
+			<symbol name="espIgnCorr"		storage="ubyte:1"	type="paramList:yesNo"				divider="1"		unit=""		group="TC, Ignition active corr."	gauge="0"	gaugeMin="0"	gaugeMax="1"	tick="1"	userName="I.ESP correction"			color="4"	interpolate="0" priority="94" />
+			<symbol name="raceChronoTx"			storage="ubyte:1"		type="paramList:yesNo"	divider="1"		unit=""		group="Other"										gauge="0"																				userName="Race chrono transmit"	color="1" priority="97" />
+
+			<!-- DO NOT TOUCH DEBUG 7 !!!!! -->
+			<symbol name="dsgBlipActive"				storage="ubyte:1"  type="paramList:yesNo" userName="D7" divider = "1" unit="" group="Debug"  gauge="0" color="1" priority="99" />
+
+			<symbol name="debug6"	storage="ubyte:1"  type="paramList:yesNo" divider = "1" unit="" group="Debug"  gauge="0" gaugeMin="0" gaugeMax="1"  tick="1" userName="D6" color="1" priority="99" />
+
+			<symbol name="stackOverflow"	storage="ubyte:1"  type="paramList:yesNo" userName="SOVERFLOW" divider = "1" unit="" group="Debug"  gauge="0" color="1" priority="99" />
+
+			<symbol name="revMatchEnable"		storage="ubyte:1"  type="paramList:yesNo" userName="Rev. match active" divider = "1" unit="" group="Rev matching"  gauge="0" color="1" priority="1" />
+
+			<symbol name="pwm2OutputDC"	storage="ubyte" type="value" divider = "1"   unit="%"     group="Other"	 gauge="1" gaugeMin="0" gaugeMax="100" tick="10"  userName="PWM #2 DC" priority="21" color="5"/>
+			<symbol name="coolantFanDC"	storage="ubyte" type="value" divider = "1"   unit="%"     group="Outputs"	 gauge="1" gaugeMin="0" gaugeMax="100" tick="10"  userName="Coolant fan DC" priority="11" color="5"/>
+
+			<symbol name="ewgTarget"		storage="ubyte" type="value" divider = "1"   unit="%"     group="Boost"	 gauge="1" gaugeMin="0" gaugeMax="100" tick="10"  userName="EWG target" priority="11" color="5"/>
+			<symbol name="ewgDC"				storage="sbyte" type="value" divider = "1"   unit="%"     group="Boost"	 gauge="1" gaugeMin="-100" gaugeMax="100" tick="10"  userName="EWG DC" priority="11" color="5"/>
+			<symbol name="ewgPosition"	storage="ubyte" type="value" divider = "2"   unit="%"     group="Boost"	 gauge="1" gaugeMin="0" gaugeMax="100" tick="10"  userName="EWG position" priority="11" color="5"/>
+
+			<symbol name="cltVoltage"   storage ="ubyte"  type="value" divider = "51"  unit="V"		  group="Analog inputs" gauge="0" gaugeMin="0" gaugeMax="5"  userName="CLT Voltage" color="5" priority="8" />
+			<symbol name="iatVoltage"   storage ="ubyte"  type="value" divider = "51"  unit="V"			group="Analog inputs" gauge="0" gaugeMin="0" gaugeMax="5"  userName="IAT Voltage" color="5" priority="8" />
+
+			<symbol name="coolantPressure"		 storage ="ubyte"  type="value" divider = "1"  unit="kPa"	group="Pressure" gauge="0" gaugeMin="0" gaugeMax="255"    userName="Coolant pressure"   color="5" priority="8" />
+			<symbol name="crankCasePressure"   storage ="ubyte"  type="value" divider = "1"  unit="kPa"	group="Pressure" gauge="0" gaugeMin="0" gaugeMax="255"    userName="Crankcase pressure" color="5" priority="8" />
+
+			<symbol name="revMatchGear"		storage="ubyte:4"  type="value" userName="Rev. match gear target" divider = "1" unit="" group="Rev matching"  gauge="0" color="2" priority="2" gaugeMin="0" gaugeMax="9"/>
+
+			<symbol name="ignAftersartLock"	storage="ubyte:1"  type="paramList:yesNo" userName="I.Ignition afterstart lock" divider = "1" unit="" group="Ignition active corr."  gauge="0" color="1" priority="94" />
+
+			<symbol name="revMatchArmed"			storage="ubyte:1"  type="paramList:yesNo" userName="Rev. match armed" divider = "1" unit="" group="Rev matching"  gauge="0" color="1" priority="99" />
+			<symbol name="dsgLaunchControl"		storage="ubyte:1"  type="paramList:yesNo" userName="DSG LC" divider = "1" unit=""	group="AT" gauge="0" color="1" priority="97" />
+			<symbol name="canBusOverload"			storage="ubyte:1"  type="paramList:yesNo" userName="CANBUS overload" divider = "1" unit="" group="Other"  gauge="0" color="1" priority="99" />
+
+			<symbol name="revMatchTargetRPM"	storage="ubyte"  type="value" userName="Rev. match RPM target" divider = "-100" unit="rpm" group="Rev matching"  gauge="0" color="3" priority="2" gaugeMin="1000" gaugeMax="15000"/>
+			<symbol name="canBusLoad"				  storage="ubyte"  type="value" userName="CANBUS load" divider = "2" unit="%" group="Other"  gauge="0" color="1" priority="99" gaugeMin="0" gaugeMax="100" />
+			<symbol name="lambdaErrorMult"		storage="sbyte"  type="value" userName="Lambda error mult." offset="1" divider = "200" unit="%" group="Fueling"  gauge="0" color="1" priority="99" gaugeMin="0.5" gaugeMax="1.5" />
+
+			<symbol name="ignRevMatching"	storage="ubyte:1"  type="paramList:yesNo" userName="I.Rev Matching" divider = "1" unit="" group="Ignition active corr."  gauge="0" color="1" priority="94"/>
+
+			<symbol name="debug3"				storage="ubyte:1"	type="paramList:yesNo"	userName="D3" divider = "1" unit=""	group="Debug"  gauge="0" color="1"/>
+			<symbol name="debug4"				storage="ubyte:1"	type="paramList:yesNo"	userName="D4" divider = "1" unit=""	group="Debug"  gauge="0" color="1"/>
+			<symbol name="CANRxBufferFull"		storage="ubyte:1"	type="paramList:yesNo"	userName="CANBUS Rx buffer full" divider = "1" unit=""	group="Other"  gauge="0" color="1"/>
+			<symbol name="debug1"				storage="ubyte:1"	type="paramList:yesNo"	userName="D1" divider = "1" unit=""	group="Debug"  gauge="0" color="1"/>
+			<symbol name="lambdaIsValid"	storage="ubyte:1"	type="paramList:yesNo"	userName="Lambda is valid" divider = "1" unit=""	group="WBO"  gauge="0" color="1"/>
+			<symbol name="cruiseControlSuspended"		storage="ubyte:1"	type="paramList:yesNo"	userName="Cruise control suspended" divider = "1" unit=""	group="Other"  gauge="0" color="1"/>
+			<symbol name="cruiseControlActive"		storage="ubyte:1"	type="paramList:yesNo"	userName="Cruise control active" divider = "1" unit=""	group="Other"  gauge="0" color="1"/>
+			<symbol name="torqueCorrFlags"	storage="word"	type="paramList:torqueCorrectionFlags"	userName="Torque corrections flags"				divider = "1"		unit=""		group="Torque active corr." 	gauge="0"		gaugeMin="0"	gaugeMax="1023"		priority="4"	color="3"/>
+
+
+			<symbol name="engineTorqueNm"				storage="sbyte"		type="value"								divider="-10"		unit="Nm"		group="Torque active corr.,Basic,AT"	gauge="0"	gaugeMin="-300"		gaugeMax="1270"		tick="50"	userName="Engine actual torque"	alarm="100" alarmCond="gt" 			priority="90"	color="1"/>
+			<symbol name="enginePowerkW"				storage="word"		type="value"								divider="1"			unit="kW"		group="Basic,AT"										gauge="0"	gaugeMin="0"	gaugeMax="1000"		tick="50"	userName="Engine actual power"				priority="80"	color="2"/>
+			<symbol name="engineTorqueCorr"			storage="sbyte"		type="value"								divider="-10"		unit="Nm"		group="Torque active corr."						gauge="0"	gaugeMin="-1280"	gaugeMax="500"		tick="50"	userName="Total torque corrections"		priority="99"	color="1"/>
+			<symbol name="switchesRawVoltage"		storage="ubyte"		type="value"								divider="51"		unit="V"		group="Switches"											gauge="0"	gaugeMin="0"			gaugeMax="5"		tick="32"	userName="Switches voltage raw"		priority="8"	color="2"/>
+			<symbol name="dsgTorqueLosses"		storage="ubyte"		type="value"								divider="2"		unit="%"		group="Torque active corr.,AT"				gauge="0"	gaugeMin="0"		gaugeMax="250"	tick="50"	userName="DSG torque losses"		priority="2"	color="1"/>
+
+			<symbol name="dkgFlags"				storage="ubyte:4"		type="paramList:dkgFlags"		divider="1"		unit=""		group="AT"													gauge="0"		gaugeMin="0"			gaugeMax="15"			tick="1"	userName="DKG state"					priority="94"	color="1"/>
+			<symbol name="atEngineStartBlock"	storage="ubyte:1"	type="paramList:yesNo"		divider="1"		unit=""		group="AT,Basic,Ignition,Fueling"		gauge="0"		gaugeMin="0"			gaugeMax="15"			tick="1"	userName="AT	Blocks START"		priority="95"	color="1"/>
+			<symbol name="outputTestActive"			storage="ubyte:1"	type="paramList:outputState" divider="1"  unit=""		group="Outputs"		gauge="0"	gaugeMin="0"			gaugeMax="1"			tick="1"	userName="Outputs test state"			priority="94"	color="5" />
+			
+			<symbol name="dbwOverride"				storage="ubyte:2"  type="paramList:dbwOverride" userName="D10" divider = "1" unit="" group="Debug"  gauge="0" color="1" priority="99" />
+
+			<symbol name="fuelUsed"									 storage ="word"   type="value" divider="100"  unit="l" group="Fueling" gauge="0" gaugeMin="0" gaugeMax="255"  userName="Fuel used" interpolate="0" color="5"/>
+			<symbol name="engineProtection"					 storage ="ubyte"  type="paramList:engineProtection" divider="1"  unit="" group="Other" gauge="0" gaugeMin="0" gaugeMax="65535"  userName="Engine protection code" interpolate="0" color="5"/>
+			<symbol name="ompPosition"							 storage ="ubyte"  type="value" divider="2"  unit="%" group="Other" gauge="0" gaugeMin="0" gaugeMax="200"  userName="Oil metering pump pos" interpolate="0" color="5"/>			
+			<symbol name="cruiseControlTargetSpeed"	 storage ="ubyte"  type="value" divider="1"  unit="km/h" group="Other" gauge="0" gaugeMin="0" gaugeMax="255"  userName="Cruise control target" interpolate="0" color="5"/>			
+
+			<paramlist name="dbwOverride" export="1" bitfield="1">
+				<list name="NONE"				value="0"/>
+				<list name="DC"					value="1"/>
+				<list name="TAREGT"			value="2"/>
+			</paramlist>
+
+			<paramlist name="knockEventsBits" bitfield="1" export="0">
+				<list name="NO KNOCK"		value="0"/>
+				<list name="EVNT1"			value="1"/>
+				<list name="EVNT2"			value="2"/>
+				<list name="EVNT3"			value="3"/>
+				<list name="EVNT4"			value="4"/>
+				<list name="EVNT5"			value="5"/>
+				<list name="EVNT6"			value="6"/>
+				<list name="EVNT7"			value="7"/>
+				<list name="EVNT8"			value="8"/>
+				<list name="EVNT9"			value="9"/>
+				<list name="EVNT10"			value="10"/>
+				<list name="EVNT11"			value="11"/>
+				<list name="EVNT12"			value="12"/>
+			</paramlist>
+
+			<paramlist name="mSwitchState" bitfield="1" export="0" > <!--same value like in VARIABLES !!!!! never export-->
+				<list name="MS1_A"			value="0"/>
+				<list name="MS1_B"			value="1"/>
+				<list name="MS1_C"			value="2"/>
+			</paramlist>
+
+			<paramlist name="muxSwitch" bitfield="1" export="0" >
+				<list name="NONE"				value="0"/>
+				<list name="MUXS1"			value="1"/>
+				<list name="MUXS2"			value="2"/>
+				<list name="MUXS3"			value="3"/>
+			</paramlist>
+
+			<paramlist name="atModeList" export="1">
+				<list name="UNKNOWN"	value="0"/>
+				<list name="P"				value="2"/>
+				<list name="R"				value="3"/>
+				<list name="N"				value="4"/>
+				<list name="D"				value="5"/>
+				<list name="S"				value="6"/>
+				<list name="M"				value="7"/>
+				<list name="TT_PL"		value="8"/>
+				<list name="TT_MI"		value="9"/>
+				<list name="FAULT"		value="15"/>
+			</paramlist>
+
+			<paramList name="dkgFlags" export="0">
+				<list name="NO_INTERVENTION"	value="0"/>
+				<list name="CREEP"						value="2"/>
+				<list name="TCT_INTV_DEC"			value="3"/>
+				<list name="TCT_INTV_INC"			value="4"/>
+				<list name="N_REGULATION"			value="6"/>
+				<list name="TQ_DEC"						value="12"/>
+				<list name="TCT_ES"						value="13"/>
+				<list name="INVALID"					value="15"/>
+			</paramList>
+
+			<paramlist name="canBusState">
+				<list name="BUS OK"								value="0"/>
+				<list name="MODULE DISCONNECTED"	value="1"/>
+				<list name="BUS ERROR"					  value="2"/>
+			</paramlist>
+
+			<paramlist name="yesNo" export="0">
+				<list name="NO"			value="0"/>
+				<list name="YES"		value="1"/>
+			</paramlist>
+
+			<paramlist name="onOff" export="0">
+				<list name="ON"			value="1"/>
+				<list name="OFF"		value="0"/>
+			</paramlist>
+
+			<paramlist name="outputState">
+				<list name="INACTIVE"			value="0"/>
+				<list name="ACTIVE"				value="1"/>
+			</paramlist>
+
+			<paramlist name="ignError">
+				<list name="NO ERROR"														value="0"/>
+				<list name="TOOTH OUT OF RANGE"									value="1"/>
+				<list name="UNEXPECTED MISSING TOOTH"						value="2"/>
+				<list name="CAM SYNC ERROR"											value="4"/>
+				<list name="CAM SYNC ERROR, TOOTH OUT OF RANGE" value="5"/>
+				<list name="FALSE SEC TRIGGER, FILTERED"				value="8"/>
+				<list name="FALSE PRIM TRIGGER, FILTERED"				value="16"/>
+			</paramlist>
+
+			<paramlist name="emuIgnStatus">
+				<list name="NOSYNC"						value="0"/>
+				<list name="SYNCHRONISING"		value="1"/>
+				<list name="SYNCHRONISED"			value="2"/>
+			</paramlist>
+
+			<paramlist name="emuState">
+				<list name="UNKNOWN"					value="0"/>
+				<list name="INACTIVE"					value="1"/>
+				<list name="CRANKING"					value="2"/>
+				<list name="AFTERSTART"				value="3"/>
+				<list name="RUNNING"					value="4"/>
+				<list name="DELAYED TURN OFF"	value="5"/>
+			</paramlist>
+
+			<paramlist name="checkEngine" bitfield="1">
+				<list name="NONE"					  value="0"/>
+				<list name="CLT"					  value="1"/>
+				<list name="IAT"					  value="2"/>
+				<list name="MAP"					  value="3"/>
+				<list name="WBO"					  value="4"/>
+				<list name="EGT1"					  value="5"/>
+				<list name="EGT2"					  value="6"/>
+				<list name="EGT ALARM"			value="7"/>
+				<list name="KNOCK"					value="8"/>
+				<list name="FF SENSOR"			value="9"/>
+				<list name="DBW"					  value="10"/>
+				<list name="FPR"					  value="11"/>
+				<list name="DIFF CTRL"			value="12"/>
+				<list name="DSG"						value="13"/>
+				<list name="EWG"						value="14"/>
+				<list name="OILP"						value="15"/>
+			</paramlist>
+
+			<paramlist name="torqueCorrectionFlags" bitfield="1">
+				<list name="NONE"										value="0"/>
+				<list name="NITROUS"								value="1"/>
+				<list name="TRACTION CONTROL"				value="2"/>
+				<list name="AUTOMATIC TRANSMITION"	value="3"/>
+				<list name="IDLE INCREASE"					value="4"/>
+				<list name="SPARK CUT"							value="5"/>
+				<list name="FUEL CUT"								value="7"/>
+				<list name="REV. MATCHING"					value="8"/>
+				<list name="AIR CONDITIONING"				value="9"/>
+				<list name="CLUTCH ADAPTATION"			value="10"/>
+				<list name="ENGINE START BLOCKED"		value="11"/>
+			</paramlist>
+
+			<paramlist name="engineProtection" bitfield="1">
+				<list name="NONE"				value="0"/>
+				<list name="CLT"				value="1"/>
+				<list name="EGT"				value="2"/>
+				<list name="FPRD"				value="3"/>
+				<list name="OILTL"			value="4"/>
+				<list name="OILTH"			value="5"/>
+				<list name="OVEB"				value="6"/>
+				<list name="STT"				value="7"/>
+				<list name="OILP"				value="8"/>
+			</paramlist>
+
+			<paramlist name="disengagedEngaged" export="0">
+				<list name="Engaged"			value="1"/>
+				<list name="Disengaged"		value="0"/>
+			</paramlist>
+
+		</variables>
+	</frameData>
+
+	<presets>
+		<preset name="Fuel">
+			<symbol name="RPM"/>
+			<symbol name="MAP"/>
+			<symbol name="wboLambda"/>
+			<symbol name="pulseWidth"/>
+			<symbol name="VE"/>
+			<symbol name="Warmup"/>
+			<symbol name="TPS"/>
+			<symbol name="accEnrich"/>
+		</preset>
+
+		<preset name="Ignition"> 
+			<symbol name="RPM"/>
+			<symbol name="MAP"/>
+			<symbol name="IgnAngle"/>
+			<symbol name="ignFromTable"/>
+			<symbol name="ignSyncStatus"/>
+			<symbol name="ignError"/>
+			<symbol name="camSyncPrimTooth"/>
+			<symbol name="dwellTime"/>
+		</preset>
+
+		<preset name="DBW"> 
+			<symbol name="etcPos"/>
+			<symbol name="etcTarget"/>
+			<symbol name="etcDC"/>
+			<symbol name="etcError"/>
+			<symbol name="etcDeltaError"/>
+			<symbol name="pidITerm"/>
+			<symbol name="pidDTerm"/>
+			<symbol name="pidPTerm"/>
+		</preset>
+
+		<preset name="Boost">
+			<symbol name="MAP"/>
+			<symbol name="boostTarget"/>
+			<symbol name="wboAFR"/>
+			<symbol name="RPM"/>
+			<symbol name="boostDC"/>
+			<symbol name="boostCorrection"/>
+			<symbol name="boostDCErrCor"/>
+			<symbol name="boostDCFromTable"/>
+		</preset>
+
+		<preset name="VVT"> 
+			<symbol name="RPM"/>
+			<symbol name="MAP"/>
+			<symbol name="cam1Angle"/>
+			<symbol name="cam1AngleTarget"/>
+			<symbol name="cam2Angle"/>
+			<symbol name="cam2AngleTarget"/>
+			<symbol name="cam1ValveDC"/>
+			<symbol name="cam2ValveDC"/>
+		</preset>
+
+		<preset name="Idle">
+			<symbol name="RPM"/>
+			<symbol name="MAP"/>
+			<symbol name="wboAFR"/>
+			<symbol name="idleTarget"/>
+			<symbol name="idleDC"/>
+			<symbol name="idleAngleCorr"/>
+			<symbol name="curentPIDCorrection"/>
+			<symbol name="idleControlActive"/>
+		</preset>
+
+		<preset name="Launch control"> 
+			<symbol name="RPM"/>
+			<symbol name="MAP"/>
+			<symbol name="lcActive"/>
+			<symbol name="lcFuelEnrich"/>
+			<symbol name="lcIgnRetard"/>
+			<symbol name="IgnAngle"/>
+			<symbol name="Egt1"/>
+			<symbol name="Egt2"/>
+		</preset>
+
+		<preset name="WBO">
+			<symbol name="RPM"/>
+			<symbol name="MAP"/>
+			<symbol name="wboLambda"/>
+			<symbol name="wboHeaterDC"/>
+			<symbol name="wboRI"/>
+			<symbol name="wboVS"/>
+			<symbol name="wboIPMeas"/>
+		</preset>
+
+		<preset name="Traction control">
+			<symbol name="RPM"/>
+			<symbol name="MAP"/>
+			<symbol name="TPS"/>
+			<symbol name="none"/>
+			<symbol name="undrivenSpeed"/>
+			<symbol name="drivenSpeed"/>
+			<symbol name="slip"/>
+			<symbol name="slipTarget"/>
+			<symbol name="tcTorqueReduction"/>
+		</preset>
+
+		<preset name="AutoTrans">
+			<symbol name="RPM"/>
+			<symbol name="MAP"/>
+			<symbol name="etcPos"/>
+			<symbol name="etcTarget"/>
+			<symbol name="dsgNextGear"/>
+			<symbol name="gear"/>
+			<symbol name="dsgClutchEngaged"/>
+			<symbol name="dsgMode"/>
+			<symbol name="dsgTorqueReduction"/>
+			<symbol name="dsgBlip"/>
+			<symbol name="dsgSyncTime"/>
+			<symbol name="dsgTargetRPM"/>
+			<symbol name="dsgTargetTorque"/>
+			<symbol name="actualTorque"/>
+			<symbol name="dsgShiftUp"/>
+			<symbol name="dsgShiftDown"/>
+		</preset>
+
+		<preset name="Rev. matching">
+			<symbol name="RPM"/>
+			<symbol name="TPS"/>
+			<symbol name="brakeSwitch"/>
+			<symbol name="clutchPedal"/>
+			<symbol name="revMatchGear"/>
+			<symbol name="gear"/>
+			<symbol name="revMatchTargetRPM"/>
+			<symbol name="revMatchEnable"/>
+			<symbol name="revMatchArmed"/>
+			<symbol name=""/>
+			<symbol name=""/>
+			<symbol name=""/>
+			<symbol name=""/>
+			<symbol name=""/>
+			<symbol name=""/>
+			<symbol name=""/>
+		</preset>
+
+		<preset name="Engine torque">
+			<symbol name="RPM"/>
+			<symbol name="MAP"/>
+			<symbol name="actualTorque"/>
+			<symbol name="engineTorqueNm"/>
+			<symbol name="engineTorqueCorr"/>
+			<symbol name=""/>
+			<symbol name="enginePowerkW"/>
+			<symbol name=""/>
+			<symbol name="dsgTargetTorque"/>
+			<symbol name="espTargetTorque"/>
+			<symbol name=""/>
+			<symbol name=""/>
+			<symbol name=""/>
+			<symbol name=""/>
+			<symbol name=""/>
+			<symbol name=""/>
+		</preset>
+		
+	</presets>
+</log>
