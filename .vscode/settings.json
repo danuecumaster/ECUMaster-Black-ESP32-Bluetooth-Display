@@ -1,5 +1,8 @@
 {
     "files.associations": {
         "string": "cpp"
-    }
+    },
+    "editor.defaultFormatter": "xaver.clang-format",
+    "editor.formatOnSave": true,
+    "C_Cpp.clang_format_fallbackStyle": "{ BasedOnStyle: Google, IndentWidth: 2, ColumnLimit: 0}",
 }

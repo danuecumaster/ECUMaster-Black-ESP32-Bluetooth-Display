@@ -2,7 +2,15 @@
     // See http://go.microsoft.com/fwlink/?LinkId=827846
     // for the documentation about the extensions.json format
     "recommendations": [
-        "platformio.platformio-ide"
+        "davidanson.vscode-markdownlint",
+        "eamodio.gitlens",
+        "mechatroner.rainbow-csv",
+        "ms-vscode.cmake-tools",
+        "ms-vscode.cpptools",
+        "ms-vscode.cpptools-extension-pack",
+        "ms-vscode.cpptools-themes",
+        "platformio.platformio-ide",
+        "xaver.clang-format"
     ],
     "unwantedRecommendations": [
         "ms-vscode.cpptools-extension-pack"

@@ -1,14 +1,15 @@
 #include <Arduino.h>
-// #define LV_COLOR_16_SWAP 0
-#include <lvgl.h>
-#include <TFT_eSPI.h>
 #include <BluetoothSerial.h>
-#include <string>
+#include <TFT_eSPI.h>
+#include <TaskManagerIO.h>
+#include <lvgl.h>
+
 #include <stdexcept>
+#include <string>
 using namespace std;
 
 #include "emu_mac_address.h"
-
+#include "ledControl.h"
 
 // #define USE_NAME
 const char *pin = "1234";
@@ -19,29 +20,24 @@ String myBtName = "ESP32-BT-Master";
 #endif
 
 BluetoothSerial SerialBT;
- 
+
 #ifdef USE_NAME
 // String slaveName = "EMUCANBT_SPP";
 String slaveName = "EMULOGGER";
 #else
-// uint8_t address[6] = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }; // Replace with the ECUMaster's MAC address
-uint8_t address[6] = { MAC0, MAC1, MAC2, MAC3, MAC4, MAC5 }; // create a file emu_mac_address.h in /include with the values
+uint8_t address[6] = {MAC0, MAC1, MAC2, MAC3, MAC4, MAC5};  // setup the value in lib/emu_mac_address.h
 #endif
 
 const int backLightPin = 27;
 const int buzzerPin = 22;
 bool buzzerOn = false;
-bool btIconSts = false;
-static lv_style_t style_bt;
-static bool style_initialized = false;
 
 int rpm;
 int spd;
-float wboLambda;
-float lambdaTarget;
+float afr;
 float mapR;
 float boost;
-int gear;
+int tps;
 int clt;
 int ign;
 int inj;
@@ -49,14 +45,12 @@ float bat;
 int cel;
 
 unsigned long previousMillis = 0;
-const unsigned long reconnectInterval = 3000;
+const unsigned long reconnectInterval = 5000;
 
 LV_FONT_DECLARE(lv_font_montserrat_14);
 LV_FONT_DECLARE(lv_font_montserrat_18);
 LV_FONT_DECLARE(lv_font_montserrat_20);
 LV_FONT_DECLARE(lv_font_montserrat_28);
-
-lv_obj_t *bt_icon_label;
 
 // Display & LVGL setup
 TFT_eSPI tft = TFT_eSPI();
@@ -64,58 +58,25 @@ static lv_disp_draw_buf_t draw_buf;
 static lv_color_t buf[LV_HOR_RES_MAX * 20];
 lv_obj_t *table;
 
-void update_bt_icon_color(bool is_connected, bool firstTime) {
-  if (btIconSts != is_connected || firstTime) {
-    if (!style_initialized) {
-      lv_style_init(&style_bt);
-      style_initialized = true;
-    }
-    if (is_connected) {
-      lv_style_set_text_color(&style_bt, lv_color_make(0, 255, 0)); // Green
-    } else {
-      lv_style_set_text_color(&style_bt, lv_color_make(0, 0, 255)); // Red
-    }
-    lv_obj_add_style(bt_icon_label, &style_bt, 0);
-    btIconSts = is_connected;
-  }
-}
-
 void connectToBt() {
   bool connected;
-#ifndef USE_NAME
-  SerialBT.setPin(pin);
-#endif
-
+  if (!SerialBT.hasClient()) {
+    ledWhite();
 #ifdef USE_NAME
-  connected = SerialBT.connect(slaveName);
+    connected = SerialBT.connect(slaveName);
 #else
-  connected = SerialBT.connect(address);
+    connected = SerialBT.connect(address);
 #endif
-
-  if (connected) {
-    Serial.println("Connected Successfully!");
-    
-    digitalWrite(4, 1);
-    digitalWrite(16, 1);
-    digitalWrite(17, 0);
-  } else {
-    Serial.println("Initial connect failed. Will retry in loop...");
-    digitalWrite(4, 0);
-    digitalWrite(16, 1);
-    digitalWrite(17, 1);
+    if (connected) {
+      Serial.println("Connected Successfully!");
+      ledBlue();
+    } else {
+      Serial.println("Initial connect failed. Will retry in loop...");
+      ledRed();
+      delay(1000);
+    }
   }
-  update_bt_icon_color(SerialBT.hasClient(), false);
 }
-
-
-void create_bt_icon() {
-  bt_icon_label = lv_label_create(lv_scr_act());
-  lv_label_set_text(bt_icon_label, LV_SYMBOL_BLUETOOTH);
-  lv_obj_set_style_text_font(bt_icon_label, &lv_font_montserrat_28, LV_PART_MAIN);
-  lv_obj_align(bt_icon_label, LV_ALIGN_BOTTOM_RIGHT, -3, -5);
-  update_bt_icon_color(SerialBT.hasClient(), true);
-}
-
 
 // LVGL Display Flush Callback
 void my_disp_flush(lv_disp_drv_t *disp, const lv_area_t *area, lv_color_t *color_p) {
@@ -128,11 +89,10 @@ void my_disp_flush(lv_disp_drv_t *disp, const lv_area_t *area, lv_color_t *color
   lv_disp_flush_ready(disp);
 }
 
-
 // Cell alignment fix
-void my_table_event_cb(lv_event_t * e) {
-  lv_obj_t * table = lv_event_get_target(e);
-  lv_obj_draw_part_dsc_t * dsc = (lv_obj_draw_part_dsc_t *)lv_event_get_param(e);
+void my_table_event_cb(lv_event_t *e) {
+  lv_obj_t *table = lv_event_get_target(e);
+  lv_obj_draw_part_dsc_t *dsc = (lv_obj_draw_part_dsc_t *)lv_event_get_param(e);
 
   if (dsc->part == LV_PART_ITEMS) {
     uint16_t row = dsc->id / lv_table_get_col_cnt(table);
@@ -225,7 +185,7 @@ void create_table() {
   lv_obj_set_scrollbar_mode(table, LV_SCROLLBAR_MODE_OFF);
   lv_obj_set_style_text_color(table, lv_color_white(), LV_PART_ITEMS);
   lv_obj_set_style_bg_color(table, lv_color_make(30, 30, 30), LV_PART_MAIN);
-  //lv_obj_set_style_text_font(table, &lv_font_montserrat_20, LV_PART_ITEMS);
+  // lv_obj_set_style_text_font(table, &lv_font_montserrat_20, LV_PART_ITEMS);
 
   static lv_style_t style_cell0;
   lv_style_init(&style_cell0);
@@ -253,9 +213,9 @@ void create_table() {
 
   lv_table_set_cell_value(table, 0, 0, "RPM");
   lv_table_set_cell_value(table, 0, 2, "SPD");
-  lv_table_set_cell_value(table, 1, 0, "LT");
-  lv_table_set_cell_value(table, 1, 2, "L");
-  lv_table_set_cell_value(table, 2, 0, "GR");
+  lv_table_set_cell_value(table, 1, 0, "AFR");
+  lv_table_set_cell_value(table, 1, 2, "CLT");
+  lv_table_set_cell_value(table, 2, 0, "TPS");
   lv_table_set_cell_value(table, 2, 2, "BAT");
   lv_table_set_cell_value(table, 3, 0, "MAP");
   lv_table_set_cell_value(table, 3, 2, "BST");
@@ -266,67 +226,40 @@ void create_table() {
   lv_obj_add_event_cb(table, my_table_event_cb, LV_EVENT_DRAW_PART_BEGIN, NULL);
   lv_obj_add_event_cb(table, table_event_cb_bg, LV_EVENT_DRAW_PART_BEGIN, NULL);
 
-  create_bt_icon();
-
   lv_timer_handler();
 }
 
-int freq = 500;    // frequency
-int channel = 0;    // aisle
-int resolution = 8; 
-void setup() {
-
-
-  // Init led
-  pinMode(4, OUTPUT);
-  pinMode(17, OUTPUT);
-  pinMode(16, OUTPUT);
-  digitalWrite(4, 1);
-  digitalWrite(16, 1);
-  digitalWrite(17, 1);
-  ledcSetup(channel, freq, resolution); // set channel
-
-  /// 
-  tft.init();
-  pinMode(backLightPin, OUTPUT);
-  digitalWrite(backLightPin, LOW);
-  // uint16_t darkGray = ((30 & 0xF8) << 8) | ((30 & 0xFC) << 3) | (30 >> 3);
-  tft.fillScreen(TFT_DARKGREY);
-  tft.setRotation(1);
-  Serial.begin(115200);
-  Serial.println("setup!");
-
-  pinMode(buzzerPin, OUTPUT);
-
-  // // Initialize LVGL
-  lv_init();
-  lv_refr_now(NULL);
-  lv_disp_draw_buf_init(&draw_buf, buf, NULL, LV_HOR_RES_MAX * 10);
-
-  // Setup LVGL Display Driver
-  static lv_disp_drv_t disp_drv;
-  lv_disp_drv_init(&disp_drv);
-  disp_drv.hor_res = 320;
-  disp_drv.ver_res = 240;
-  disp_drv.flush_cb = my_disp_flush;
-  disp_drv.draw_buf = &draw_buf;
-  lv_disp_drv_register(&disp_drv);
-
-  SerialBT.begin(myBtName, true);
-
-  create_table();
-  digitalWrite(backLightPin, HIGH);
-  connectToBt();
-  
-} 
-
+bool isBlueOn = false;
+void ledStatus() {
+  if (!SerialBT.hasClient()) {
+    // we should reinit all values
+    cel = 0;
+    if (!isBlueOn) {
+      ledBlue();
+    } else {
+      ledOff();
+    }
+    isBlueOn = !isBlueOn;
+  } else {
+    if (cel > 0) {
+      isBlueOn = false;
+      ledRed();
+    } else {
+      if (!isBlueOn) {
+        ledBlue();
+      }
+      isBlueOn = true;
+    }
+  }
+}
 
 int decodeCheckEngine(uint16_t value) {
-  int cel_codes = 0; string cel_names = "";
+  // TODO: move it in a dedicated file like emuBluetooth.cpp
+  int cel_codes = 0;
+  string cel_names = "";
   if (value == 0) {
     return 0;
-  }
-  else {
+  } else {
     if (value & (1 << 0)) {
       cel_codes++;  // Bit 0
       cel_names = "CLT ";
@@ -357,89 +290,47 @@ int decodeCheckEngine(uint16_t value) {
     }
 
     lv_table_set_cell_value(table, 5, 1, cel_names.c_str());
-    if (cel_names.size()) {
-      digitalWrite(4, 0);
-      digitalWrite(16, 1);
-      digitalWrite(17, 1);
-    }
     return cel_codes;
   }
 }
 
-
-void loop() {
-// Serial.println("red");
-// //red
-//   digitalWrite(4, 0);
-//   digitalWrite(16, 1);
-//   digitalWrite(17, 1);
-//   delay(5000);
-// Serial.println("green");
-// //green
-
-//   digitalWrite(4, 1);
-//   digitalWrite(16, 0);
-//   digitalWrite(17, 1);
-//   delay(500);
-// Serial.println("blue");
-// //blue
-//   digitalWrite(4, 1);
-//   digitalWrite(16, 1);
-//   digitalWrite(17, 0);
-
-//   delay(500);
-// Serial.println("off");
-
-// // off
-//   digitalWrite(4, 1);
-//   digitalWrite(16, 1);
-//   digitalWrite(17, 1);
-
-
-
-  uint8_t frame[5];
+void callbackReadBTData(const uint8_t *buffer, size_t size) {
   uint8_t channel;
+  uint8_t idChar;
+  uint8_t valueH;
+  uint8_t valueL;
+  uint8_t checksum;
   uint16_t value;
   int chData;
-  unsigned long currentMillis = millis();
-
-  
-  if (!SerialBT.connected()) {
-    // Attempt reconnection every 5 seconds
-    if (currentMillis - previousMillis >= reconnectInterval) {
-      previousMillis = currentMillis;
-      connectToBt();
-    }
-  } 
-
-  update_bt_icon_color(SerialBT.hasClient(), false);
-
-  // Wait until at least 5 bytes are available
-  while (SerialBT.available() >= 5) {
-    SerialBT.readBytes(frame, 5);  // Read exactly 5 bytes
-    channel = frame[0];
-    value = (frame[2] << 8) | frame[3];
+  for (size_t i = 0; i < size;) {
+    channel = buffer[i];
+    valueH = buffer[i + 2];
+    valueL = buffer[i + 3];
+    value = (valueH << 8) | valueL;
+    checksum = buffer[i + 4];  // should be checked
     chData = static_cast<int>(channel);
+    // Serial.printf("channel %d - value %d - checksum %d\n", channel, value, checksum);
+    // Serial.printf("msg: %x %x %x %x %x\n", channel, idChar, valueH, valueL, checksum);
     if (chData == 1) {
       rpm = static_cast<int>(value);
       lv_table_set_cell_value(table, 0, 1, String(rpm).c_str());
     } else if (chData == 28) {
       spd = (static_cast<int>(value));
       lv_table_set_cell_value(table, 0, 3, (String(spd) + " KM/H").c_str());
-    } else if (chData == 27) {
-      wboLambda = (static_cast<float>(value)); 
-      lv_table_set_cell_value(table, 1, 3, String(wboLambda).c_str());
+    } else if (chData == 12) {
+      afr = (static_cast<float>(value) / 10);
+      lv_table_set_cell_value(table, 1, 1, String(afr).c_str());
     } else if (chData == 2) {
       mapR = (static_cast<float>(value) / 100);
       boost = (mapR - 1.0132f);
       lv_table_set_cell_value(table, 3, 1, (String(mapR) + " BAR").c_str());
       lv_table_set_cell_value(table, 3, 3, (String(boost) + " BAR").c_str());
-    } else if (chData == 13) {
-      gear = static_cast<int>(value);
-      lv_table_set_cell_value(table, 2, 1, (String(gear)).c_str());
-    } else if (chData == 32) {
-      lambdaTarget = static_cast<int>(value);
-      lv_table_set_cell_value(table, 1, 1, (String(lambdaTarget)).c_str());
+    } else if (chData == 3) {
+      tps = static_cast<int>(value);
+      lv_table_set_cell_value(table, 2, 1, (String(tps) + " %").c_str());
+    } else if (chData == 24) {
+      clt = static_cast<int>(value);
+      lv_table_set_cell_value(table, 1, 3, (String(clt) + " °C").c_str());
     } else if (chData == 6) {
       ign = (static_cast<int>(value) / 2);
       lv_table_set_cell_value(table, 4, 3, (String(ign) + " °").c_str());
@@ -452,11 +343,70 @@ void loop() {
     } else if (chData == 255) {
       cel = decodeCheckEngine(value);
     }
+    i += 5;
   }
-  
+}
+
+void refreshDisplay() {
   buzzerOn = (cel > 0 || clt > 105 || rpm > 7000 || boost > 1.10 || (bat < 12.00 && bat > 1.00));
   digitalWrite(buzzerPin, (millis() % 600 < 300) && buzzerOn);
 
   lv_obj_invalidate(table);
   lv_timer_handler();
+}
+
+void loop() {
+  taskManager.runLoop();
+}
+
+void setup() {
+  // Init led
+  pinMode(4, OUTPUT);
+  pinMode(17, OUTPUT);
+  pinMode(16, OUTPUT);
+  ledOff();
+
+  // init TFT
+  tft.init();
+  pinMode(backLightPin, OUTPUT);
+  digitalWrite(backLightPin, LOW);
+  tft.fillScreen(TFT_DARKGREY);
+  tft.setRotation(1);
+
+  // init Serial
+  Serial.begin(115200);
+  Serial.println("setup!");
+
+  pinMode(buzzerPin, OUTPUT);
+
+  // Initialize LVGL
+  lv_init();
+  lv_refr_now(NULL);
+  lv_disp_draw_buf_init(&draw_buf, buf, NULL, LV_HOR_RES_MAX * 10);
+
+  // Setup LVGL Display Driver
+  static lv_disp_drv_t disp_drv;
+  lv_disp_drv_init(&disp_drv);
+  disp_drv.hor_res = 320;
+  disp_drv.ver_res = 240;
+  disp_drv.flush_cb = my_disp_flush;
+  disp_drv.draw_buf = &draw_buf;
+  lv_disp_drv_register(&disp_drv);
+
+  // init bluetooth
+  SerialBT.begin(myBtName, true);
+#ifndef USE_NAME
+  SerialBT.setPin(pin);
+#endif
+  SerialBT.onData(callbackReadBTData);
+
+  // set grid
+  create_table();
+  digitalWrite(backLightPin, HIGH);
+
+  // init tasks
+  taskManager.yieldForMicros(250);
+  taskManager.scheduleFixedRate(250, ledStatus);
+  taskManager.scheduleFixedRate(300, refreshDisplay);
+  taskManager.scheduleFixedRate(reconnectInterval, connectToBt);
 }
