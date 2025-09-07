@@ -5,6 +5,7 @@
 #include "BluetoothSerial.h"
 #include <string>
 #include <stdexcept>
+extern const lv_font_t ui_font_JBM_18; //Mono-space font
 using namespace std;
 
 //#define USE_NAME
@@ -20,7 +21,7 @@ BluetoothSerial SerialBT;
 #ifdef USE_NAME
 String slaveName = "EMUCANBT_SPP";
 #else
-uint8_t address[6] = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }; // Replace with your MAC address
+uint8_t address[6] = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }; //Replace the MAC address
 #endif
 
 const int backLightPin = 27;
@@ -45,10 +46,8 @@ int cel;
 unsigned long previousMillis = 0;
 const unsigned long reconnectInterval = 5000;
 
-LV_FONT_DECLARE(lv_font_montserrat_14);
-LV_FONT_DECLARE(lv_font_montserrat_18);
-LV_FONT_DECLARE(lv_font_montserrat_20);
 LV_FONT_DECLARE(lv_font_montserrat_28);
+LV_FONT_DECLARE(ui_font_JBM_18);                
 
 lv_obj_t *bt_icon_label;
 
@@ -80,7 +79,7 @@ void create_table() {
   lv_obj_set_scrollbar_mode(table, LV_SCROLLBAR_MODE_OFF);
   lv_obj_set_style_text_color(table, lv_color_white(), LV_PART_ITEMS);
   lv_obj_set_style_bg_color(table, lv_color_make(30, 30, 30), LV_PART_MAIN);
-  //lv_obj_set_style_text_font(table, &lv_font_montserrat_20, LV_PART_ITEMS);
+  //lv_obj_set_style_text_font(table, &ui_font_JBM_20, LV_PART_ITEMS);
 
   static lv_style_t style_cell0;
   lv_style_init(&style_cell0);
@@ -97,10 +96,10 @@ void create_table() {
   lv_obj_set_style_border_color(table, lv_color_white(), LV_PART_ITEMS);
   lv_obj_set_style_border_side(table, LV_BORDER_SIDE_FULL, LV_PART_ITEMS);
 
-  lv_table_set_col_width(table, 0, 53);
-  lv_table_set_col_width(table, 1, 105);
+  lv_table_set_col_width(table, 0, 47);
+  lv_table_set_col_width(table, 1, 107);
   lv_table_set_col_width(table, 2, 47);
-  lv_table_set_col_width(table, 3, 115);
+  lv_table_set_col_width(table, 3, 119);
 
   lv_table_add_cell_ctrl(table, 5, 1, LV_TABLE_CELL_CTRL_MERGE_RIGHT);
   lv_table_add_cell_ctrl(table, 5, 2, LV_TABLE_CELL_CTRL_MERGE_RIGHT);
@@ -160,15 +159,15 @@ void setup() {
 
 void connectToBt() {
   bool connected;
-#ifndef USE_NAME
-  SerialBT.setPin(pin);
-#endif
-
-#ifdef USE_NAME
-  connected = SerialBT.connect(slaveName);
-#else
-  connected = SerialBT.connect(address);
-#endif
+  #ifndef USE_NAME
+    SerialBT.setPin(pin);
+  #endif
+  
+  #ifdef USE_NAME
+    connected = SerialBT.connect(slaveName);
+  #else
+    connected = SerialBT.connect(address);
+  #endif
 
   if (connected) {
     Serial.println("Connected Successfully!");
@@ -247,7 +246,7 @@ int decodeCheckEngine(uint16_t value) {
   if (value == 0) {
     return 0;
   }
-  else {
+  else if (value > 0) {
     if (value & (1 << 0)) {
       cel_codes++;  // Bit 0
       cel_names = "CLT ";
@@ -291,11 +290,8 @@ void my_table_event_cb(lv_event_t * e) {
     uint16_t row = dsc->id / lv_table_get_col_cnt(table);
     uint16_t col = dsc->id % lv_table_get_col_cnt(table);
 
-    if (col == 0 || col == 2) {
-      dsc->label_dsc->font = &lv_font_montserrat_18;
-    } else if (col == 1 || col == 3) {
-      dsc->label_dsc->font = &lv_font_montserrat_20;
-    }
+    dsc->label_dsc->font = &ui_font_JBM_18;
+    
     dsc->label_dsc->align = LV_TEXT_ALIGN_CENTER;
     if ((row == 0 && col == 1) || (row == 0 && col == 3) || (row == 1 && col == 1) || (row == 1 && col == 3) || (row == 2 && col == 1) || (row == 2 && col == 3) || (row == 3 && col == 1) || (row == 3 && col == 3) ||
         (row == 4 && col == 1) || (row == 4 && col == 3)) {
