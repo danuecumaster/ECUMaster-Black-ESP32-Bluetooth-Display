@@ -68,7 +68,10 @@ This project interfaces the **ECUMaster Black ECU** with an **ESP32** to create 
 **A:** Check lv_conf.h - LV_COLOR_16_SWAP
 
 **Q:** Font size not working?  
-**A:** Check lv_conf.h - Enable the required font sizes. 
+**A:** Check lv_conf.h and copy the font file to the main directory.
+
+**Q:** 3D Printing material?  
+**A:** ABS or ASA recommended if cabin heat is extremely high. 
 
 ---
 
