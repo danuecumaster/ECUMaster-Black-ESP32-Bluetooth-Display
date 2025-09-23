@@ -18,7 +18,7 @@ This project interfaces the **ECUMaster Black ECU** with an **ESP32** to create 
 - Automatic Bluetooth reconnection
 - Real-time monitoring of engine vitals
 - Custom alerts (CEL, coolant temp, RPM, AFR, voltage, boost, etc.) via display & buzzer
-- TFT screen GUI with **LVGL**
+- TFT screen GUI (mono-space font) with **LVGL**
 
 > ⚠️ **Note:** If `SerialBT.setPin(pin)` doesn't work, downgrade to **ESP32 Arduino Core 2.0.17** in the board manager.
 
