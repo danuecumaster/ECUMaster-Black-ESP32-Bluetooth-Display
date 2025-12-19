@@ -21,7 +21,7 @@ BluetoothSerial SerialBT;
 #ifdef USE_NAME
 String slaveName = "EMUCANBT_SPP";
 #else
-uint8_t address[6] = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }; //Replace the MAC address
+uint8_t address[6] = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }; //Replace with the real MAC address
 #endif
 
 const int backLightPin = 27;
