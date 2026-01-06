@@ -70,6 +70,15 @@ These values represent the **highest recorded readings since power-on**, allowin
 
 --- 
 
+## 🔍 ECU Log Analyzer (Web)
+
+Analyze ESP32 / EMU Black CSV logs directly in your browser.
+
+👉 **Launch Log Analyzer**  
+https://danuecumaster.github.io/ECUMaster-Black-ESP32-Bluetooth-Display/log_analyzer/
+
+---
+
 ### ❓ FAQ
 
 **Q:** SerialBT.setPin() doesn't work?  
