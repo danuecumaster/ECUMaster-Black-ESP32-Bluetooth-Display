@@ -5,7 +5,9 @@
 #include "BluetoothSerial.h"
 #include <string>
 #include <stdexcept>
-extern const lv_font_t ui_font_JBM_18; //Mono-space font
+extern const lv_font_t ui_font_JBM_18;
+extern const lv_font_t ui_font_JBM_15;
+extern const lv_font_t ui_font_JBM_10;
 using namespace std;
 
 //#define USE_NAME
@@ -19,9 +21,9 @@ String myBtName = "ESP32-BT-Master";
 BluetoothSerial SerialBT;
 
 #ifdef USE_NAME
-String slaveName = "EMUCANBT_SPP";
+	String slaveName = "EMUCANBT_SPP";
 #else
-uint8_t address[6] = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }; //Replace with the real MAC address
+	uint8_t address[6] = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }; /***** UPDATE THIS *****/
 #endif
 
 const int backLightPin = 27;
@@ -29,6 +31,10 @@ const int buzzerPin = 22;
 bool buzzerOn = false;
 bool btIconSts = false;
 static lv_style_t style_bt;
+static lv_style_t style_max0;
+static lv_style_t style_max1;
+static lv_style_t style_max2;
+static lv_style_t style_max3;
 static bool style_initialized = false;
 
 int rpm;
@@ -42,14 +48,23 @@ int ign;
 int inj;
 float bat;
 int cel;
+float maxboost = -100.0f;
+int maxclt = -40;
 
 unsigned long previousMillis = 0;
 const unsigned long reconnectInterval = 5000;
 
+LV_FONT_DECLARE(lv_font_montserrat_14);
 LV_FONT_DECLARE(lv_font_montserrat_28);
 LV_FONT_DECLARE(ui_font_JBM_18);                
+LV_FONT_DECLARE(ui_font_JBM_15);                
+LV_FONT_DECLARE(ui_font_JBM_10);                      
 
 lv_obj_t *bt_icon_label;
+lv_obj_t *max_icon_label;  
+lv_obj_t *max_icon_label1;  
+lv_obj_t *max_val_label_clt;
+lv_obj_t *max_val_label_bst;             
 
 // Display & LVGL setup
 TFT_eSPI tft = TFT_eSPI();
@@ -97,13 +112,16 @@ void create_table() {
   lv_obj_set_style_border_side(table, LV_BORDER_SIDE_FULL, LV_PART_ITEMS);
 
   lv_table_set_col_width(table, 0, 47);
-  lv_table_set_col_width(table, 1, 107);
+  lv_table_set_col_width(table, 1, 119);
   lv_table_set_col_width(table, 2, 47);
-  lv_table_set_col_width(table, 3, 119);
+  lv_table_set_col_width(table, 3, 107);
 
   lv_table_add_cell_ctrl(table, 5, 1, LV_TABLE_CELL_CTRL_MERGE_RIGHT);
   lv_table_add_cell_ctrl(table, 5, 2, LV_TABLE_CELL_CTRL_MERGE_RIGHT);
   lv_table_add_cell_ctrl(table, 5, 3, LV_TABLE_CELL_CTRL_MERGE_RIGHT);
+  
+  lv_table_add_cell_ctrl(table, 4, 2, LV_TABLE_CELL_CTRL_MERGE_RIGHT);
+  lv_table_add_cell_ctrl(table, 4, 3, LV_TABLE_CELL_CTRL_MERGE_RIGHT);
 
   lv_table_set_cell_value(table, 0, 0, "RPM");
   lv_table_set_cell_value(table, 0, 2, "SPD");
@@ -111,17 +129,15 @@ void create_table() {
   lv_table_set_cell_value(table, 1, 2, "CLT");
   lv_table_set_cell_value(table, 2, 0, "TPS");
   lv_table_set_cell_value(table, 2, 2, "BAT");
-  lv_table_set_cell_value(table, 3, 0, "MAP");
-  lv_table_set_cell_value(table, 3, 2, "BST");
-  lv_table_set_cell_value(table, 4, 0, "INJ");
-  lv_table_set_cell_value(table, 4, 2, "IGN");
+  lv_table_set_cell_value(table, 3, 0, "INJ");
+  lv_table_set_cell_value(table, 3, 2, "IGN");
+  lv_table_set_cell_value(table, 4, 0, "BST");
   lv_table_set_cell_value(table, 5, 0, "CEL");
 
   lv_obj_add_event_cb(table, my_table_event_cb, LV_EVENT_DRAW_PART_BEGIN, NULL);
   lv_obj_add_event_cb(table, table_event_cb_bg, LV_EVENT_DRAW_PART_BEGIN, NULL);
 
   create_bt_icon();
-
   lv_timer_handler();
 }
 
@@ -177,6 +193,18 @@ void connectToBt() {
   update_bt_icon_color(SerialBT.hasClient(), false);
 }
 
+static char buf_rpm[12];
+static char buf_spd[16];
+static char buf_afr[12];
+static char buf_boost[16];
+static char buf_tps[12];
+static char buf_clt[12];
+static char buf_ign[12];
+static char buf_inj[12];
+static char buf_bat[12];
+static char buf_max_clt[32];
+static char buf_max_boost[32];
+
 void loop() {
   uint8_t frame[5];
   uint8_t channel;
@@ -202,39 +230,54 @@ void loop() {
     chData = static_cast<int>(channel);
     if (chData == 1) {
       rpm = static_cast<int>(value);
-      lv_table_set_cell_value(table, 0, 1, String(rpm).c_str());
+      snprintf(buf_rpm, sizeof(buf_rpm), "%d", rpm);
+      lv_table_set_cell_value(table, 0, 1, buf_rpm);
     } else if (chData == 28) {
-      spd = (static_cast<int>(value));
-      lv_table_set_cell_value(table, 0, 3, (String(spd) + " KM/H").c_str());
+      spd = (static_cast<int>(value) / 2.8f);
+      snprintf(buf_spd, sizeof(buf_spd), "%d KM/H", spd);
+      lv_table_set_cell_value(table, 0, 3, buf_spd);
     } else if (chData == 12) {
-      afr = (static_cast<float>(value) / 10);
-      lv_table_set_cell_value(table, 1, 1, String(afr).c_str());
+      afr = (static_cast<float>(value) / 10.0f);
+      snprintf(buf_afr, sizeof(buf_afr), "%.2f", afr);
+      lv_table_set_cell_value(table, 1, 1, buf_afr);
     } else if (chData == 2) {
-      mapR = (static_cast<float>(value) / 100);
+      mapR = (static_cast<float>(value) / 100.0f);
       boost = (mapR - 1.0132f);
-      lv_table_set_cell_value(table, 3, 1, (String(mapR) + " BAR").c_str());
-      lv_table_set_cell_value(table, 3, 3, (String(boost) + " BAR").c_str());
+      if(maxboost < boost) { maxboost = boost; }      
+     // lv_table_set_cell_value(table, 3, 1, (String(mapR) + " BAR").c_str());
+      snprintf(buf_boost, sizeof(buf_boost), "%.2f BAR", boost);
+      lv_table_set_cell_value(table, 4, 1, buf_boost);    
+      snprintf(buf_max_boost, sizeof(buf_max_boost), "%.2fBAR", maxboost); 
+      lv_label_set_text(max_val_label_bst, buf_max_boost);
     } else if (chData == 3) {
       tps = static_cast<int>(value);
-      lv_table_set_cell_value(table, 2, 1, (String(tps) + " %").c_str());
+      snprintf(buf_tps, sizeof(buf_tps), "%d %%", tps);
+      lv_table_set_cell_value(table, 2, 1, buf_tps);
     } else if (chData == 24) {
-      clt = static_cast<int>(value);
-      lv_table_set_cell_value(table, 1, 3, (String(clt) + " °C").c_str());
+      clt = static_cast<int>(value);    
+      if(maxclt < clt) { maxclt = clt; }    
+      snprintf(buf_clt, sizeof(buf_clt), "%d°C", clt);
+      lv_table_set_cell_value(table, 1, 3, buf_clt);    
+      snprintf(buf_max_clt, sizeof(buf_max_clt), "%d°C", maxclt); 
+      lv_label_set_text(max_val_label_clt, buf_max_clt);
     } else if (chData == 6) {
       ign = (static_cast<int>(value) / 2);
-      lv_table_set_cell_value(table, 4, 3, (String(ign) + " °").c_str());
+      snprintf(buf_ign, sizeof(buf_ign), "%d °", ign);
+      lv_table_set_cell_value(table, 3, 3, buf_ign);
     } else if (chData == 19) {
       inj = (static_cast<int>(value) / 2);
-      lv_table_set_cell_value(table, 4, 1, (String(inj) + " %").c_str());
+      snprintf(buf_inj, sizeof(buf_inj), "%d %%", inj);
+      lv_table_set_cell_value(table, 3, 1, buf_inj);
     } else if (chData == 5) {
-      bat = (static_cast<float>(value) / 37);
-      lv_table_set_cell_value(table, 2, 3, (String(bat) + " V").c_str());
+      bat = (static_cast<float>(value) / 37.0f);
+      snprintf(buf_bat, sizeof(buf_bat), "%.2f V", bat);
+      lv_table_set_cell_value(table, 2, 3, buf_bat);
     } else if (chData == 255) {
       cel = decodeCheckEngine(value);
     }
   }
   
-  buzzerOn = (cel > 0 || clt > 105 || rpm > 7000 || boost > 1.10 || (bat < 12.00 && bat > 1.00));
+  buzzerOn = (cel > 0 || clt > 110 || rpm > 7000 || boost > 1.20 || (bat < 11.00 && bat > 1.00));
   digitalWrite(buzzerPin, (millis() % 600 < 300) && buzzerOn);
 
   lv_obj_invalidate(table);
@@ -252,8 +295,8 @@ int decodeCheckEngine(uint16_t value) {
       cel_names = "CLT ";
     }
     if (value & (1 << 1)) {
-      cel_codes++;  // Bit 1
-      cel_names += "IAT ";
+      //cel_codes++;  // Bit 1
+      //cel_names += "IAT ";
     }
     if (value & (1 << 2)) {
       cel_codes++;  // Bit 2
@@ -264,18 +307,17 @@ int decodeCheckEngine(uint16_t value) {
       cel_names += "WBO ";
     }
     if (value & (1 << 8)) {
-      cel_codes++;  // Bit 8
-      cel_names += "FF SENSOR ";
+      //cel_codes++;  // Bit 8
+      //cel_names += "FF SENSOR ";
     }
     if (value & (1 << 9)) {
-      cel_codes++;  // Bit 9
-      cel_names += "DBW ";
+      //cel_codes++;  // Bit 9
+      //cel_names += "DBW ";
     }
     if (value & (1 << 10)) {
-      cel_codes++;  // Bit 10
-      cel_names += "FPR ";
+      //cel_codes++;  // Bit 10
+      //cel_names += "FPR ";
     }
-
     lv_table_set_cell_value(table, 5, 1, cel_names.c_str());
     return cel_codes;
   }
@@ -291,13 +333,12 @@ void my_table_event_cb(lv_event_t * e) {
     uint16_t col = dsc->id % lv_table_get_col_cnt(table);
 
     dsc->label_dsc->font = &ui_font_JBM_18;
-    
     dsc->label_dsc->align = LV_TEXT_ALIGN_CENTER;
     if ((row == 0 && col == 1) || (row == 0 && col == 3) || (row == 1 && col == 1) || (row == 1 && col == 3) || (row == 2 && col == 1) || (row == 2 && col == 3) || (row == 3 && col == 1) || (row == 3 && col == 3) ||
-        (row == 4 && col == 1) || (row == 4 && col == 3)) {
+        (row == 4 && col == 1) || (row == 4 && col == 2)) {
       dsc->label_dsc->align = LV_TEXT_ALIGN_RIGHT;
     }
-    if (row == 5 && col == 1) {
+    if ((row == 5 && col == 1)) {
       dsc->label_dsc->align = LV_TEXT_ALIGN_CENTER;
     }
   }
@@ -347,8 +388,12 @@ static void table_event_cb_bg(lv_event_t *e) {
       bg_color = lv_color_make(0, 0, 255);
       text_color = lv_color_white();
     }
-    if (row == 3 && col == 3 && value > 1.10) {
+    if (row == 4 && col == 1 && value > 1.10) {
       bg_color = lv_color_make(0, 0, 255);
+      text_color = lv_color_white();
+    }
+    if (row == 4 && col == 2) {
+      bg_color = lv_color_make(55, 55, 55);
       text_color = lv_color_white();
     }
     if (row == 5 && col == 1 && value_str != nullptr && value_str[0] != '\0') {
@@ -385,4 +430,36 @@ void create_bt_icon() {
   lv_obj_set_style_text_font(bt_icon_label, &lv_font_montserrat_28, LV_PART_MAIN);
   lv_obj_align(bt_icon_label, LV_ALIGN_BOTTOM_RIGHT, -3, -5);
   update_bt_icon_color(SerialBT.hasClient(), true);
+  
+  max_icon_label = lv_label_create(lv_scr_act());
+  lv_label_set_text(max_icon_label, "CLT                BOOST");
+  lv_obj_set_style_text_font(max_icon_label, &ui_font_JBM_10, LV_PART_MAIN);
+  lv_style_init(&style_max0);
+  lv_style_set_text_color(&style_max0, lv_color_make(255, 255, 255));
+  lv_obj_add_style(max_icon_label, &style_max0, 0);
+  lv_obj_align(max_icon_label, LV_ALIGN_BOTTOM_RIGHT, -3, -64);
+
+  max_icon_label1 = lv_label_create(lv_scr_act());
+  lv_label_set_text(max_icon_label1, LV_SYMBOL_CHARGE);
+  lv_obj_set_style_text_font(max_icon_label1, &lv_font_montserrat_14, LV_PART_MAIN);
+  lv_style_init(&style_max3);
+  lv_style_set_text_color(&style_max3, lv_color_make(255, 255, 255));
+  lv_obj_add_style(max_icon_label1, &style_max3, 0);
+  lv_obj_align(max_icon_label1, LV_ALIGN_BOTTOM_RIGHT, -75, -60);
+
+  max_val_label_clt = lv_label_create(lv_scr_act());
+  lv_obj_set_style_text_font(max_val_label_clt, &ui_font_JBM_15, LV_PART_MAIN);
+  lv_style_init(&style_max1);
+  lv_style_set_text_color(&style_max1, lv_color_make(255, 255, 255));
+  lv_obj_add_style(max_val_label_clt, &style_max1, 0);
+  lv_obj_align(max_val_label_clt, LV_ALIGN_BOTTOM_LEFT, 173, -42);
+  lv_label_set_text(max_val_label_clt, String(" ").c_str());
+
+  max_val_label_bst = lv_label_create(lv_scr_act());
+  lv_obj_set_style_text_font(max_val_label_bst, &ui_font_JBM_15, LV_PART_MAIN);
+  lv_style_init(&style_max2);
+  lv_style_set_text_color(&style_max2, lv_color_make(255, 255, 255));
+  lv_obj_add_style(max_val_label_bst, &style_max2, 0);
+  lv_obj_align(max_val_label_bst, LV_ALIGN_BOTTOM_RIGHT, -3, -42);
+  lv_label_set_text(max_val_label_bst, String(" ").c_str());
 }
