@@ -70,7 +70,7 @@ These values represent the **highest recorded readings since power-on**, allowin
 
 --- 
 
-## 🔍 ECU Log Analyzer (Web)
+### 🔍 Log Analyzer (Web)
 
 Analyze ESP32 / EMU Black CSV logs directly in your browser.
 
