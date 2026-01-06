@@ -106,7 +106,7 @@ These values represent the **highest recorded readings since power-on**, allowin
 
 ![Display](Docs/display.jpg)
 
-[![Watch on YouTube](https://img.youtube.com/vi/EzVEeiy3vmI/0.jpg)]([https://youtu.be/1yv-feC6I2c](https://youtu.be/EzVEeiy3vmI))
+[![Watch on YouTube](https://img.youtube.com/vi/EzVEeiy3vmI/0.jpg)](https://youtu.be/EzVEeiy3vmI)
 
 ---
 
