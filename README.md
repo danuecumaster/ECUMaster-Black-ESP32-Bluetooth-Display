@@ -102,11 +102,11 @@ These values represent the **highest recorded readings since power-on**, allowin
   
 ---
 
-## 📺 Demo Videos
+## 📺 Demo
 
-[![Watch on YouTube](https://img.youtube.com/vi/b16--jYl7CY/0.jpg)](https://youtu.be/b16--jYl7CY)
+![Display](Docs/display.jpg)
 
-[![Watch on YouTube](https://img.youtube.com/vi/1yv-feC6I2c/0.jpg)](https://youtu.be/1yv-feC6I2c)
+[![Watch on YouTube](https://img.youtube.com/vi/EzVEeiy3vmI/0.jpg)]([https://youtu.be/1yv-feC6I2c](https://youtu.be/EzVEeiy3vmI))
 
 ---
 
