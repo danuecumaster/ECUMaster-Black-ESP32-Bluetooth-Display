@@ -17,10 +17,24 @@ This project interfaces the **ECUMaster Black ECU** with an **ESP32** to create 
 
 - Automatic Bluetooth reconnection
 - Real-time monitoring of engine vitals
+- **Peak value tracking (Peak Boost & Peak Coolant Temperature)**
 - Custom alerts (CEL, coolant temp, RPM, AFR, voltage, boost, etc.) via display & buzzer
 - TFT screen GUI (mono-space font) with **LVGL**
 
 > ⚠️ **Note:** If `SerialBT.setPin(pin)` doesn't work, downgrade to **ESP32 Arduino Core 2.0.17** in the board manager.
+
+---
+
+### 🆕 New Functionality - Peak Value Display
+
+The display now tracks and shows:
+
+- **Peak Boost Pressure**
+- **Peak Coolant Temperature (CLT)**
+
+These values represent the **highest recorded readings since power-on**, allowing quick review after spirited driving or testing without logging software.
+
+> 💡 Useful for tuning, safety checks, and track sessions.
 
 ---
 
@@ -40,10 +54,10 @@ This project interfaces the **ECUMaster Black ECU** with an **ESP32** to create 
 2. Install dependencies (LVGL, eSPI, BluetoothSerial, etc.)
 3. Edit LVGL and eSPI config if needed.
 4. Edit the code - Use your MAC address or use Bluetooth name and Pin.
-5. Copy the mono-space font (ui_font_JBM_18.c) to your project directory
+5. Copy the mono-space fonts (ui_font_JBM_18.c, ui_font_JBM_15.c, ui_font_JBM_10.c) to your project directory
 6. Upload to ESP32
 7. Optional - Connect an active 3.0-3.3V buzzer to GPIO Pin 22 (for warnings/CEL)
-8. Pair with ECUMaster Black BT adapter
+8. Pair with ECUMaster Black Bluetooth adapter
 9. Enjoy real-time data on-screen!
 
 ---
