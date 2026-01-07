@@ -15,8 +15,6 @@ document.getElementById('file').addEventListener('change', e => {
 			const inj = d.map(r=>g(r,'_inj'));
 			const clt = d.map(r=>g(r,'_clt'));
 			const spd = d.map(r=>g(r,'_spd'));
-			
-			const zoomEnd = Math.floor(t.length * 0.15);
 
 			Plotly.newPlot(plot,[
 				{x:t,y:map,line:{color:'#3498db'}},
@@ -34,14 +32,10 @@ document.getElementById('file').addEventListener('change', e => {
 				height:950,
 				hovermode:false,
 				showlegend:false,
-				margin: { t: 40, l: 50, r: 60 },	
+				margin: { t: 40, l: 50, r: 60 },
 				xaxis: {
-					anchor: 'y7',
-					autorange: false,
-					range: [0, t[zoomEnd]],
 					rangemode: 'tozero',
-					minallowed: 0,
-					maxallowed: t[t.length - 1],
+					anchor: 'y7',
 					side: 'bottom',
 					showticklabels: true
 				},
@@ -127,6 +121,7 @@ document.getElementById('file').addEventListener('change', e => {
 				el.onclick = () => {
 					const i = +el.dataset.trace;
 					const visible = plot.data[i].visible !== 'legendonly';
+
 					Plotly.restyle(plot,{
 						visible: visible ? 'legendonly' : true
 					},[i]);
