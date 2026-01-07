@@ -136,3 +136,7 @@ document.getElementById('resetBtn').onclick = () => {
 	document.querySelector('.top').style.display = 'block';
 	document.getElementById('resetBtn').style.display = 'none';
 };
+window.addEventListener('load', () => {
+    document.body.style.transition = 'opacity 0.5s ease';
+    document.body.style.opacity = '1';
+});
