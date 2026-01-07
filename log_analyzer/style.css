@@ -1,0 +1,143 @@
+* { font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif; }
+body {
+	background:#0f1117;
+	color:#eaeaea;
+	margin:0;			
+}
+.header {
+	padding:0px 14px;
+	background:#0b0d12;
+	border-bottom:1px solid #222;
+	display:flex;
+	align-items:center;
+	gap:12px;
+}
+.header strong {
+	font-weight: 600;
+	letter-spacing: 0.2px;			
+	line-height: 38px;
+	height: 38px;
+	background: #515151;
+	margin-left: -14px;
+	text-align: center;
+	min-width: 200px;
+	font-size: 15px;
+}
+.header strong a { color: #fff; text-decoration: none; }
+input[type="file"] { font-size:0.75rem; }
+#wrap { position:relative; }
+#plot { height:950px; }
+.axis-label {
+	position:absolute;
+	font-size:12px;
+	display:flex;
+	align-items:center;
+	gap:6px;
+	cursor:pointer;
+	user-select:none;
+}
+.axis-label.hidden { opacity:0.3; }
+.axis-line { width:18px; height:2px; }
+.left  { left:8px; }
+.right { right:8px; }
+#hoverBox {
+	position:absolute;
+	background:#111;
+	border:1px solid #444;
+	padding:8px;
+	font-family:monospace;
+	font-size:12px;
+	pointer-events:none;
+	display:none;
+}
+.js-plotly-plot .plotly .modebar { top: -32px; }
+.top {
+	display: block;
+	height: 38px;
+	padding: 0;
+	line-height: 35px;
+	position: relative;
+	margin-left: auto;
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	right: -10px;
+}
+.top a { 
+	color: #fff;
+	font-size: 0.7rem;
+	text-decoration: none;
+	background: #607d8b;
+	height: 20px;
+	padding-left: 7px;
+	padding-right: 6px;
+	line-height: 20px;
+	display: inline-block;
+	vertical-align: middle;
+	border-radius: 3px;
+	min-width: 55px;
+}
+.top a:hover { opacity: 0.75; }
+#file { cursor: pointer; width: 80px !important; }
+#resetBtn {
+	display: none;
+	margin-left: -12px;
+	background: #2b2929;
+	color: #eaeaea;
+	cursor: pointer;
+	font-size: 14px;
+	border: 0;
+	height: 38px;
+	line-height: 35px;
+	padding-left: 10px;
+	padding-right: 10px;
+}
+#resetBtn i { font-size: 14px; color: #fff; }
+#resetBtn:hover { background: #222; }
+@media screen and (max-width: 465px) { 
+	#resetBtn {
+		position: absolute;
+		right: 0px;
+		margin-left: unset;
+	}	
+	.js-plotly-plot .plotly .modebar {
+		width: 100%;
+		float: none;
+		top: -32x;
+		right: unset;
+		left: unset;
+	}
+}
+@media screen and (max-width: 430px) { 
+	.header strong { min-width: 180px; font-size: 14px; } 
+}
+@media screen and (max-width: 370px) { 
+	.header { gap: 5px; } 
+	.header strong {
+		min-width: unset;
+		font-size: 13px;
+		padding-left: 8px !important;
+		padding-right: 8px !important;
+	}
+}
+@media screen and (max-width: 370px) { 
+	.header strong {
+		background: none;
+		padding-right: 5px !important;
+	}
+}
+@media screen and (max-width: 340px) { 
+	.header strong a {
+		display: inline-block;
+		width: 0;
+		overflow: hidden;
+		white-space: nowrap;
+	}
+	.header strong a:after {
+		content: 'Log Viewer';
+		text-align: left;
+		font-size: 14px;
+		position: absolute;
+		left: 8px;
+	}
+}
