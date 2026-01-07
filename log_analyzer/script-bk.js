@@ -34,17 +34,15 @@ document.getElementById('file').addEventListener('change', e => {
 				height:950,
 				hovermode:false,
 				showlegend:false,
-				margin: { t: 40, l: 50, r: 60 },	
+				margin: { t: 40, l: 50, r: 60 },
 				xaxis: {
-					anchor: 'y7',
-					autorange: false,
-					range: [0, t[zoomEnd]],
 					rangemode: 'tozero',
-					minallowed: 0,
-					maxallowed: t[t.length - 1],
+					anchor: 'y7',
 					side: 'bottom',
 					showticklabels: true
 				},
+				
+				
 
 				// Gap between graphs
 				yaxis :{domain:[0.82,1]},
@@ -127,6 +125,7 @@ document.getElementById('file').addEventListener('change', e => {
 				el.onclick = () => {
 					const i = +el.dataset.trace;
 					const visible = plot.data[i].visible !== 'legendonly';
+
 					Plotly.restyle(plot,{
 						visible: visible ? 'legendonly' : true
 					},[i]);
