@@ -147,3 +147,8 @@ footer {
 		top: 0px;
 	}
 }
+@media screen and (max-width: 280px) { 
+	.header strong a:after {
+		display: none;
+	}
+}
