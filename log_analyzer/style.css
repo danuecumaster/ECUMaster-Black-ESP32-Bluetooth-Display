@@ -125,18 +125,11 @@ footer {
 	.header { gap: 5px; } 
 	.header strong {
 		min-width: unset;
-		font-size: 13px;
 		padding-left: 8px !important;
 		padding-right: 8px !important;
-	}
-}
-@media screen and (max-width: 370px) { 
-	.header strong {
 		background: none;
 		padding-right: 5px !important;
 	}
-}
-@media screen and (max-width: 340px) { 
 	.header strong a {
 		display: inline-block;
 		width: 0;
@@ -148,6 +141,9 @@ footer {
 		text-align: left;
 		font-size: 14px;
 		position: absolute;
-		left: 8px;
+		left: 0;
+		background: #515151;
+		padding: 0px 7px;
+		top: 0px;
 	}
 }
