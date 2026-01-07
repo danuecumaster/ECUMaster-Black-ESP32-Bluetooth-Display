@@ -20,7 +20,7 @@ body {
 	background: #515151;
 	margin-left: -14px;
 	text-align: center;
-	min-width: 200px;
+	min-width: 210px;
 	font-size: 15px;
 }
 .header strong a { color: #fff; text-decoration: none; }
@@ -116,7 +116,10 @@ footer {
 	}
 }
 @media screen and (max-width: 430px) { 
-	.header strong { min-width: 180px; font-size: 14px; } 
+	.header strong { 
+		min-width: 190px; 
+		font-size: 14px; 
+	} 
 }
 @media screen and (max-width: 370px) { 
 	.header { gap: 5px; } 
@@ -141,7 +144,7 @@ footer {
 		white-space: nowrap;
 	}
 	.header strong a:after {
-		content: 'Log Viewer';
+		content: "Log Analyzer";
 		text-align: left;
 		font-size: 14px;
 		position: absolute;
