@@ -151,4 +151,11 @@ footer {
 	.header strong a:after {
 		display: none;
 	}
+	.top {
+		width: 100%;
+		margin: auto;
+		right: unset;
+		left: unset;
+		justify-content: center;
+	}
 }
