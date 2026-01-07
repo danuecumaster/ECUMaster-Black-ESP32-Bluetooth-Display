@@ -108,6 +108,7 @@ document.getElementById('file').addEventListener('change', e => {
 				Plotly.relayout(plot, {
 					shapes: [{
 						type:'line',
+						layer: 'above', 
 						x0:t[i],
 						x1:t[i],
 						y0:0,
