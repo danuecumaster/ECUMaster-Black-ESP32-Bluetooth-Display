@@ -40,6 +40,8 @@ document.getElementById('file').addEventListener('change', e => {
 					autorange: false,
 					range: [0, t[zoomEnd]],
 					rangemode: 'tozero',
+					minallowed: 0,
+					maxallowed: t[t.length - 1]
 					side: 'bottom',
 					showticklabels: true
 				},
@@ -125,7 +127,6 @@ document.getElementById('file').addEventListener('change', e => {
 				el.onclick = () => {
 					const i = +el.dataset.trace;
 					const visible = plot.data[i].visible !== 'legendonly';
-
 					Plotly.restyle(plot,{
 						visible: visible ? 'legendonly' : true
 					},[i]);
