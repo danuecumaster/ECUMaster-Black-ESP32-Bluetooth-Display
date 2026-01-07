@@ -94,6 +94,13 @@ input[type="file"] { font-size:0.75rem; }
 }
 #resetBtn i { font-size: 14px; color: #fff; }
 #resetBtn:hover { background: #222; }
+footer {
+	text-align: center;
+	font-size: 11px;
+	color: #666;
+	padding: 5px 0;
+}
+
 @media screen and (max-width: 465px) { 
 	#resetBtn {
 		position: absolute;
