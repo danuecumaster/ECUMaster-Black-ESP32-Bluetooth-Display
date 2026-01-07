@@ -20,17 +20,17 @@ document.getElementById('file').addEventListener('change', e => {
 			const smooth = 1.8;
 
 			Plotly.newPlot(plot,[
-				{x:t,y:map,line:{color:'#3498db',shape:'spline',smoothing:smooth}},
-				{x:t,y:rpm,yaxis:'y2',line:{color:'#e74c3c',shape:'spline',smoothing:smooth}},
+				{x:t,y:map,mode:'lines',line:{color:'#3498db',shape:'spline',smoothing:smooth}},
+				{x:t,y:rpm,mode:'lines',yaxis:'y2',line:{color:'#e74c3c',shape:'spline',smoothing:smooth}},
 
-				{x:t,y:tps,yaxis:'y3',line:{color:'#9b59b6',shape:'spline',smoothing:smooth}},
-				{x:t,y:afr,yaxis:'y4',line:{color:'#2ecc71',shape:'spline',smoothing:smooth}},
+				{x:t,y:tps,mode:'lines',yaxis:'y3',line:{color:'#9b59b6',shape:'spline',smoothing:smooth}},
+				{x:t,y:afr,mode:'lines',yaxis:'y4',line:{color:'#2ecc71',shape:'spline',smoothing:smooth}},
 
-				{x:t,y:ign,yaxis:'y5',line:{color:'#f1c40f',shape:'spline',smoothing:smooth}},
-				{x:t,y:inj,yaxis:'y6',line:{color:'#e67e22',shape:'spline',smoothing:smooth}},
+				{x:t,y:ign,mode:'lines',yaxis:'y5',line:{color:'#f1c40f',shape:'spline',smoothing:smooth}},
+				{x:t,y:inj,mode:'lines',yaxis:'y6',line:{color:'#e67e22',shape:'spline',smoothing:smooth}},
 
-				{x:t,y:clt,yaxis:'y7',line:{color:'#1abc9c',shape:'spline',smoothing:smooth}},
-				{x:t,y:spd,yaxis:'y8',line:{color:'#ecf0f1',shape:'spline',smoothing:smooth}}
+				{x:t,y:clt,mode:'lines',yaxis:'y7',line:{color:'#1abc9c',shape:'spline',smoothing:smooth}},
+				{x:t,y:spd,mode:'lines',yaxis:'y8',line:{color:'#ecf0f1',shape:'spline',smoothing:smooth}}
 			],{
 				height:950,
 				hovermode:false,
