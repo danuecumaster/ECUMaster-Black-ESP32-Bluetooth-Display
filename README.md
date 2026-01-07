@@ -20,12 +20,13 @@ This project interfaces the **ECUMaster Black ECU** with an **ESP32** to create 
 - **Peak value tracking (Peak Boost & Peak Coolant Temperature)**
 - Custom alerts (CEL, coolant temp, RPM, AFR, voltage, boost, etc.) via display & buzzer
 - TFT screen GUI (mono-space font) with **LVGL**
+- **Online Log Analyzer (mobile friendly)**
 
 > ⚠️ **Note:** If `SerialBT.setPin(pin)` doesn't work, downgrade to **ESP32 Arduino Core 2.0.17** in the board manager.
 
 ---
 
-### 🆕 New Functionality - Peak Value Display
+### 🆕 New Functionality - Peak Value Display & Log Analyzer
 
 The display now tracks and shows:
 
@@ -35,6 +36,12 @@ The display now tracks and shows:
 These values represent the **highest recorded readings since power-on**, allowing quick review after spirited driving or testing without logging software.
 
 > 💡 Useful for tuning, safety checks, and track sessions.
+
+Online Log Analyzer:
+
+- **No-install, browser-based CSV log viewer**
+- **Stacked ECU channels with synced hover cursor**
+- **Quick channel toggling for tuning & diagnostics**
 
 ---
 
@@ -72,7 +79,11 @@ These values represent the **highest recorded readings since power-on**, allowin
 
 ### 🔍 Log Analyzer (Web)
 
-Analyze ESP32 / EMU Black CSV logs directly in your browser.
+- Browser-based CSV viewer (no software installation required)
+- Multi-channel stacked graphs (MAP, RPM, TPS, AFR, IGN, INJ, CLT, SPD)
+- Synchronized hover cursor showing values across all channels
+- Toggle channels on/off for focused analysis
+- Mobile & tablet friendly responsive layout
 
 👉 **Launch Log Analyzer**  
 https://danuecumaster.github.io/ECUMaster-Black-ESP32-Bluetooth-Display/log_analyzer/
