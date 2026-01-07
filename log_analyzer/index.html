@@ -5,6 +5,7 @@
 	<title>ESP32 EMU-Black Log Viewer</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 	<meta name="color-scheme" content="dark">
 	<script src="https://cdn.plot.ly/plotly-3.3.0.min.js" charset="utf-8"></script>
 	<script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
@@ -31,8 +32,9 @@
 			height: 38px;
 			background: #515151;
 			margin-left: -14px;
-			padding-left: 10px;
-			padding-right: 10px;
+			text-align: center;
+			min-width: 200px;
+			font-size: 15px;
 		}
 		.header strong a { color: #fff; text-decoration: none; }
 		input[type="file"] { font-size:0.75rem; }
@@ -61,31 +63,108 @@
 			pointer-events:none;
 			display:none;
 		}
-		.js-plotly-plot .plotly .modebar { top: -35px; }
+		.js-plotly-plot .plotly .modebar { top: -32px; }
 		.top {
 			display: block;
 			height: 38px;
 			padding: 0;
-			margin-top: -15px;
-			margin-bottom: -15px;
 			line-height: 35px;
+			position: relative;
+			margin-left: auto;
+			display: flex;
+			align-items: center;
+			gap: 10px;
+			right: -10px;
 		}
 		.top a { 
 			color: #fff;
-			margin-left: 10px;
 			font-size: 0.7rem;
+			text-decoration: none;
+			background: #607d8b;
+			height: 20px;
+			padding-left: 7px;
+			padding-right: 6px;
+			line-height: 20px;
+			display: inline-block;
+			vertical-align: middle;
+			border-radius: 3px;
+			min-width: 55px;
+		}
+		.top a:hover { opacity: 0.75; }
+		#file { cursor: pointer; width: 80px !important; }
+		#resetBtn {
+			display: none;
+			margin-left: -12px;
+			background: #2b2929;
+			color: #eaeaea;
+			cursor: pointer;
+			font-size: 14px;
+			border: 0;
+			height: 38px;
+			line-height: 35px;
+			padding-left: 10px;
+			padding-right: 10px;
+		}
+		#resetBtn i { font-size: 14px; color: #fff; }
+		#resetBtn:hover { background: #222; }
+		@media screen and (max-width: 465px) { 
+			#resetBtn {
+				position: absolute;
+				right: 0px;
+				margin-left: unset;
+			}	
+			.js-plotly-plot .plotly .modebar {
+				width: 100%;
+				float: none;
+				top: -32x;
+				right: unset;
+				left: unset;
+			}
+		}
+		@media screen and (max-width: 430px) { 
+			.header strong { min-width: 180px; font-size: 14px; } 
+		}
+		@media screen and (max-width: 370px) { 
+			.header { gap: 5px; } 
+			.header strong {
+				min-width: unset;
+				font-size: 13px;
+				padding-left: 8px !important;
+				padding-right: 8px !important;
+			}
+		}
+		@media screen and (max-width: 370px) { 
+			.header strong {
+				background: none;
+				padding-right: 5px !important;
+			}
+		}
+		@media screen and (max-width: 340px) { 
+			.header strong a {
+				display: inline-block;
+				width: 0;
+				overflow: hidden;
+				white-space: nowrap;
+			}
+			.header strong a:after {
+				content: 'Log Viewer';
+				text-align: left;
+				font-size: 14px;
+				position: absolute;
+				left: 8px;
+			}
 		}
 	</style>
 </head>
 <body>
 	<div class="header">
 		<strong><a href="https://danuecumaster.github.io/ECUMaster-Black-ESP32-Bluetooth-Display/log_analyzer/">ESP32 ECU Log Viewer</a></strong>
+		<button id="resetBtn"><i class="fa-solid fa-rotate-right"></i></button>
 		<div class="top">
-			<a href="https://danuecumaster.github.io/ECUMaster-Black-ESP32-Bluetooth-Display/log_analyzer/sample_emu_log.csv" download="sample_emu_log">Download Sample CSV File</a>
-			<input type="file" id="file" accept=".csv" style="margin-left:12px">
-		</div>		
+			<a href="https://danuecumaster.github.io/ECUMaster-Black-ESP32-Bluetooth-Display/log_analyzer/sample_emu_log.csv" download="sample_emu_log"><i class="fa-solid fa-download"></i> Sample</a>
+			<input type="file" id="file" accept=".csv"/>
+		</div>	
 	</div>
-
 	<div id="wrap">
 		<div id="plot"></div>
 
@@ -181,7 +260,14 @@
 						plot_bgcolor:'#0f1117',
 						font:{color:'#eaeaea'}
 					});
-
+					
+					document.querySelector('.top').style.display = 'none';
+					document.getElementById('resetBtn').style.display = 'inline-block';					
+					if(window.innerWidth < 465) { 
+						document.getElementById('wrap').style.top = '40px'; 
+						document.getElementById('wrap').style.borderTop = '1px solid #313131'; 
+					}
+										
 					const hoverBox = document.getElementById('hoverBox');
 
 					plot.onmousemove = ev => {
@@ -247,7 +333,13 @@
 					});
 				}
 			});
-		});		
+		});	
+		document.getElementById('resetBtn').onclick = () => {
+			Plotly.purge(plot);
+			document.getElementById('file').value = '';
+			document.querySelector('.top').style.display = 'block';
+			document.getElementById('resetBtn').style.display = 'none';
+		};
 	</script>
 </body>
 </html>
