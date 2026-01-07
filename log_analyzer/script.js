@@ -17,7 +17,7 @@ document.getElementById('file').addEventListener('change', e => {
 			const spd = d.map(r=>g(r,'_spd'));
 			
 			const zoomEnd = Math.floor(t.length * 0.15);
-			const smooth = 1.2;
+			const smooth = 1.8;
 
 			Plotly.newPlot(plot,[
 				{x:t,y:map,line:{color:'#3498db',shape:'spline',smoothing:smooth}},
