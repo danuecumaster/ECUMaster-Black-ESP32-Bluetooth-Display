@@ -41,7 +41,7 @@ document.getElementById('file').addEventListener('change', e => {
 					range: [0, t[zoomEnd]],
 					rangemode: 'tozero',
 					minallowed: 0,
-					maxallowed: t[t.length - 1]
+					maxallowed: t[t.length - 1],
 					side: 'bottom',
 					showticklabels: true
 				},
