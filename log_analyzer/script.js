@@ -160,7 +160,8 @@ document.getElementById('file').addEventListener('change', e => {
 					const y = ev.clientY - bb.top;
 					if (x < 0 || x > bb.width) return;
 
-					const xa = plot._fullLayout.xaxis;
+					const xa = plot._fullLayout?.xaxis;
+					if (!xa) return;
 					const pct = x / bb.width;
 					const xVal = xa.range[0] + pct * (xa.range[1] - xa.range[0]);
 					const i = findIndex(xVal);
