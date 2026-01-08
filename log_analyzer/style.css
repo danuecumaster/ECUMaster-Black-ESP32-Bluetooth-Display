@@ -102,17 +102,25 @@ input[type="file"] {
 .top a:hover { 
 	opacity: 0.75; 
 }
-#file { 
+#file {
 	cursor: pointer;
-    width: 80px !important;
-    height: 30px;
-    line-height: 30px;
-    background: #6b6b6b;
-    border-radius: 4px;
+	width: 80px !important;
+	height: 30px;
+	line-height: 30px;
+	background: #6b6b6b;
+	border-radius: 4px;
 	text-align: center;
+	-webkit-tap-highlight-color: transparent;
+	tap-highlight-color: transparent;
+	-webkit-appearance: none;
+	appearance: none;
+	outline: none;
 }
-#file:hover, #file:focus, #file:active, #file:target, #file:focus-within, #file:focus-visible  {
-    background: #7b7b7b;
+
+#file:hover, #file:focus, #file:active {
+	background: #7b7b7b;
+	outline: none;
+	box-shadow: none;
 }
 #resetBtn {
 	display: none;
