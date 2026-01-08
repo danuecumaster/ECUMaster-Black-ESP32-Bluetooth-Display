@@ -1,6 +1,9 @@
 * { 
 	font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif; 
 }
+html {
+	overflow-x: hidden;
+}
 body {
 	background:#0f1117;
 	color:#eaeaea;
