@@ -92,17 +92,26 @@ input[type="file"] {
 	height: 20px;
 	padding-left: 7px;
 	padding-right: 6px;
-	line-height: 20px;
+	line-height: 30px;
 	display: inline-block;
 	vertical-align: middle;
 	border-radius: 3px;
 	min-width: 55px;
+	height: 30px;
 }
 .top a:hover { 
 	opacity: 0.75; 
 }
 #file { 
-	cursor: pointer; width: 80px !important; 
+	cursor: pointer;
+    width: 80px !important;
+    height: 30px;
+    line-height: 30px;
+    background: #6b6b6b;
+    border-radius: 4px;
+}
+#file:hover {
+    background: #7b7b7b;
 }
 #resetBtn {
 	display: none;
