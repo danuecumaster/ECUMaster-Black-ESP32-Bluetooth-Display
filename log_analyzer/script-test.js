@@ -20,22 +20,22 @@ document.getElementById('file').addEventListener('change', e => {
 			const zoomEnd = Math.floor(t.length * 0.15);
 
 			Plotly.newPlot(plot,[
-				{x:t,y:map,line:{color:'#3498db'}},
-				{x:t,y:rpm,yaxis:'y2',line:{color:'#e74c3c'}},
-
-				{x:t,y:tps,yaxis:'y3',line:{color:'#9b59b6'}},
-				{x:t,y:afr,yaxis:'y4',line:{color:'#2ecc71'}},
-
-				{x:t,y:ign,yaxis:'y5',line:{color:'#f1c40f'}},
-				{x:t,y:inj,yaxis:'y6',line:{color:'#e67e22'}},
-
-				{x:t,y:clt,yaxis:'y7',line:{color:'#1abc9c'}},
-				{x:t,y:spd,yaxis:'y8',line:{color:'#00d4ff'}}
+				{x:t,y:map, xaxis:'x2', line:{color:'#3498db'}},
+				{x:t,y:rpm, xaxis:'x2', yaxis:'y2', line:{color:'#e74c3c'}},
+				// ROW 2
+				{x:t,y:tps, xaxis:'x3', yaxis:'y3', line:{color:'#9b59b6'}},
+				{x:t,y:afr, xaxis:'x3', yaxis:'y4', line:{color:'#2ecc71'}},
+				// ROW 3
+				{x:t,y:ign, xaxis:'x4', yaxis:'y5', line:{color:'#f1c40f'}},
+				{x:t,y:inj, xaxis:'x4', yaxis:'y6', line:{color:'#e67e22'}},
+				// ROW 4 (real timeline)
+				{x:t,y:clt, xaxis:'x', yaxis:'y7', line:{color:'#1abc9c'}},
+				{x:t,y:spd, xaxis:'x', yaxis:'y8', line:{color:'#00d4ff'}},
 			],{
 				height:950,
 				hovermode:false,
 				showlegend:false,
-				margin:{t:40,l:50,r:60,b:20},
+				margin:{t:40,l:50,r:60,b:30},
 
 				xaxis:{
 					anchor:'y7',
@@ -44,17 +44,43 @@ document.getElementById('file').addEventListener('change', e => {
 					rangemode:'tozero',
 					minallowed:0,
 					maxallowed:t[t.length-1],
-					side:'bottom'
+					side:'bottom',
+					ticks: 'outside',
+					ticklen: 8
+				},
+				xaxis2: {
+					matches: 'x',
+					anchor: 'y',
+					showline: true,
+					ticks: 'outside',
+					showticklabels: false,
+					ticklen: 8
+				},
+				xaxis3: {
+					matches: 'x',
+					anchor: 'y3',
+					showline: true,
+					ticks: 'outside',
+					showticklabels: false,
+					ticklen: 8
+				},
+				xaxis4: {
+					matches: 'x',
+					anchor: 'y5',
+					showline: true,
+					ticks: 'outside',
+					showticklabels: false,
+					ticklen: 8
 				},
 
-				yaxis :{domain:[0.82,1], showline: true, showticklabels:true, ticks:'outside'},
-				yaxis2:{overlaying:'y',side:'right', showline: true, showticklabels:true, ticks:'outside'},
+				yaxis :{domain:[0.82,1], showline: true, showticklabels:true, ticks:'outside', zeroline:false},
+				yaxis2:{overlaying:'y',side:'right', showline: true, showticklabels:true, ticks:'outside', zeroline:false},
 
-				yaxis3:{domain:[0.54,0.72], showline: true, showticklabels:true, ticks:'outside'},
-				yaxis4:{overlaying:'y3',side:'right', showline: true, showticklabels:true, ticks:'outside'},
+				yaxis3:{domain:[0.54,0.72], showline: true, showticklabels:true, ticks:'outside', zeroline:false},
+				yaxis4:{overlaying:'y3',side:'right', showline: true, showticklabels:true, ticks:'outside', zeroline:false},
 
-				yaxis5:{domain:[0.26,0.44], showline: true, showticklabels:true, ticks:'outside'},
-				yaxis6:{overlaying:'y5',side:'right', showline: true, showticklabels:true, ticks:'outside'},
+				yaxis5:{domain:[0.26,0.44], showline: true, showticklabels:true, ticks:'outside', zeroline:false},
+				yaxis6:{overlaying:'y5',side:'right', showline: true, showticklabels:true, ticks:'outside', zeroline:false},
 
 				yaxis7:{domain:[0.0,0.18], showline: true, showticklabels:true, ticks:'outside'},
 				yaxis8:{overlaying:'y7',side:'right', showline: true, showticklabels:true, ticks:'outside'},
