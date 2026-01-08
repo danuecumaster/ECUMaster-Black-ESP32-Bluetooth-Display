@@ -147,7 +147,7 @@ footer {
 @media screen and (max-width: 485px) { 
 	#resetBtn {
 		position: absolute;
-		right: 5px;
+		right: 8px;
 		margin-left: unset;
 	}	
 	.js-plotly-plot .plotly .modebar {
