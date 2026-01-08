@@ -118,7 +118,7 @@ input[type="file"] {
 }
 
 #file:hover, #file:focus, #file:active {
-	background: #7b7b7b;
+	background: #6b6b6b;
 	outline: none;
 	box-shadow: none;
 }
