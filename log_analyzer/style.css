@@ -13,6 +13,7 @@ body {
 	display:flex;
 	align-items:center;
 	gap:12px;
+	margin-right: -5px;
 }
 .header strong {
 	font-weight: 600;
@@ -146,7 +147,7 @@ footer {
 @media screen and (max-width: 485px) { 
 	#resetBtn {
 		position: absolute;
-		right: 0px;
+		right: 5px;
 		margin-left: unset;
 	}	
 	.js-plotly-plot .plotly .modebar {
