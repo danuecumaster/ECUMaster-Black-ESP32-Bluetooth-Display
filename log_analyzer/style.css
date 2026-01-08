@@ -1,4 +1,6 @@
-* { font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif; }
+* { 
+	font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif; 
+}
 body {
 	background:#0f1117;
 	color:#eaeaea;
@@ -23,10 +25,18 @@ body {
 	min-width: 210px;
 	font-size: 15px;
 }
-.header strong a { color: #fff; text-decoration: none; }
-input[type="file"] { font-size:0.75rem; }
-#wrap { position:relative; }
-#plot { height:950px; }
+.header strong a { 
+	color: #fff; text-decoration: none; 
+}
+input[type="file"] { 
+	font-size:0.75rem; 
+}
+#wrap { 
+	position:relative; 
+}
+#plot { 
+	height:950px; 
+}
 .axis-label {
 	position:absolute;
 	font-size:12px;
@@ -36,10 +46,18 @@ input[type="file"] { font-size:0.75rem; }
 	cursor:pointer;
 	user-select:none;
 }
-.axis-label.hidden { opacity:0.3; }
-.axis-line { width:18px; height:2px; }
-.left  { left:8px; }
-.right { right:8px; }
+.axis-label.hidden { 
+	opacity: 0.3; 
+}
+.axis-line { 
+	width: 18px; height:2px; 
+}
+.left  { 
+	left: 8px; 
+}
+.right { 
+	right:8px; 	
+}
 #hoverBox {
 	position:absolute;
 	background:#111;
@@ -50,7 +68,9 @@ input[type="file"] { font-size:0.75rem; }
 	pointer-events:none;
 	display:none;
 }
-.js-plotly-plot .plotly .modebar { top: -32px; }
+.js-plotly-plot .plotly .modebar { 
+	top: -32px; 
+}
 .top {
 	display: block;
 	height: 38px;
@@ -77,8 +97,12 @@ input[type="file"] { font-size:0.75rem; }
 	border-radius: 3px;
 	min-width: 55px;
 }
-.top a:hover { opacity: 0.75; }
-#file { cursor: pointer; width: 80px !important; }
+.top a:hover { 
+	opacity: 0.75; 
+}
+#file { 
+	cursor: pointer; width: 80px !important; 
+}
 #resetBtn {
 	display: none;
 	margin-left: -12px;
@@ -92,8 +116,12 @@ input[type="file"] { font-size:0.75rem; }
 	padding-left: 10px;
 	padding-right: 10px;
 }
-#resetBtn i { font-size: 14px; color: #fff; }
-#resetBtn:hover { background: #222; }
+#resetBtn i { 
+	font-size: 14px; color: #fff; 
+}
+#resetBtn:hover { 
+	background: #222; 
+}
 footer {
 	text-align: center;
 	font-size: 11px;
@@ -101,6 +129,7 @@ footer {
 	padding: 5px 0;
 }
 
+/*** Media Screens ***/
 @media screen and (max-width: 465px) { 
 	#resetBtn {
 		position: absolute;
@@ -122,7 +151,9 @@ footer {
 	} 
 }
 @media screen and (max-width: 370px) { 
-	.header { gap: 5px; } 
+	.header { 
+		gap: 5px; 
+	} 
 	.header strong {
 		min-width: unset;
 		padding-left: 8px !important;
