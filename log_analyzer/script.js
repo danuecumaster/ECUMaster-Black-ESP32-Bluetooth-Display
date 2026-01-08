@@ -81,8 +81,17 @@ document.getElementById('file').addEventListener('change', e => {
 				if (x < 0 || x > bb.width) return;
 
 				// map mouse X data index
+				const xa = plot._fullLayout.xaxis;
+				const xMin = xa.range[0];
+				const xMax = xa.range[1];
+
+				// mouse - data X
 				const pct = x / bb.width;
-				const i = Math.round(pct * (t.length - 1));
+				const xVal = xMin + pct * (xMax - xMin);
+
+				// find nearest index for hover values
+				let i = 0;
+				while (i < t.length - 1 && t[i] < xVal) i++;
 				if (i < 0 || i >= t.length) return;
 
 				// hover box
@@ -107,14 +116,18 @@ document.getElementById('file').addEventListener('change', e => {
 				// vertical cursor line (spans ALL rows)
 				Plotly.relayout(plot, {
 					shapes: [{
-						type:'line',
-						x0:t[i],
-						x1:t[i],
-						y0:0,
-						y1:1,
-						xref:'x',
-						yref:'paper',
-						line:{color:'#aaa',width:1,dash:'dot'}
+						type: 'line',
+						x0: xVal,
+						x1: xVal,
+						y0: 0,
+						y1: 1,
+						xref: 'x',
+						yref: 'paper',
+						line: {
+							color: '#aaa',
+							width: 1,
+							dash: 'dot'
+						}
 					}]
 				});
 			};
@@ -133,15 +146,18 @@ document.getElementById('file').addEventListener('change', e => {
 					el.classList.toggle('hidden', visible);
 				};
 			});
+			
 		}
 	});
 });	
+
 document.getElementById('resetBtn').onclick = () => {
 	Plotly.purge(plot);
 	document.getElementById('file').value = '';
 	document.querySelector('.top').style.display = 'block';
 	document.getElementById('resetBtn').style.display = 'none';
 };
+
 window.addEventListener('load', () => {
     document.body.style.transition = 'opacity 0.5s ease';
     document.body.style.opacity = '1';
