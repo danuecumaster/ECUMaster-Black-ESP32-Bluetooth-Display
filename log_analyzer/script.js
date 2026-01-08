@@ -266,6 +266,9 @@ document.getElementById('resetBtn').onclick = () => {
 	document.getElementById('file').value = '';
 	document.querySelector('.top').style.display = 'block';
 	document.getElementById('resetBtn').style.display = 'none';
+	const hoverBox = document.getElementById('hoverBox');
+    hoverBox.style.display = 'none'; 
+    hoverBox.style.opacity = '1';   
 };
 
 window.addEventListener('load', () => {
