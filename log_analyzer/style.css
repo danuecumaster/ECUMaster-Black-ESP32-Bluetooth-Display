@@ -4,7 +4,8 @@
 body {
 	background:#0f1117;
 	color:#eaeaea;
-	margin:0;	
+	margin:0;
+	overflow-x: hidden;
 }
 .header {
 	padding:0px 14px;
