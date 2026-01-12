@@ -64,16 +64,6 @@ input[type="file"] {
 .right { 
 	right:8px; 	
 }
-#hoverBox {
-	position:absolute;
-	background:#111;
-	border:1px solid #444;
-	padding:8px;
-	font-family:monospace;
-	font-size:12px;
-	pointer-events:none;
-	display:none;
-}
 .js-plotly-plot .plotly .modebar { 
 	top: -32px; 
 }
@@ -154,12 +144,26 @@ footer {
 	margin-top: 10px;
 }
 #hoverBox {
+	background:#111;
+	font-family:monospace;
+	font-size:12px;
+	display:none;	
 	position: fixed;
-	pointer-events: none;
-	z-index: 1000;
-	width: 120px;   
-	box-sizing: border-box;
-	white-space: nowrap;
+    pointer-events: none;
+    z-index: 1000;
+    width: 130px;
+    box-sizing: border-box;
+    white-space: nowrap;
+    border-radius: 3px;
+    border: 0;
+    box-shadow: 0px 0px 10px 0px #272727;
+    padding: 10px;
+	text-align: right;
+}
+#hoverBox span {
+    text-align: left;
+    float: left;
+    clear: both;
 }
 .axis-label.disabled {
 	filter: grayscale(1);
