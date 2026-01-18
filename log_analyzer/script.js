@@ -8,10 +8,16 @@ document.getElementById('file').addEventListener('change', e => {
 			const g = (r,k)=>r[k] ?? r[k.toUpperCase()];
 
 			const t   = d.map(r=>g(r,'_time'));
-			const map = d.map(r=>g(r,'_map'));
+			const map = d.map(r => {
+				const v = g(r, '_map');
+				return Number.isFinite(v) ? v / 100 : v;
+			});
 			const rpm = d.map(r=>g(r,'_rpm'));
 			const tps = d.map(r=>g(r,'_tps'));
-			const afr = d.map(r=>g(r,'_afr'));
+			const afr = d.map(r => {
+				const v = g(r, '_afr');
+				return Number.isFinite(v) ? v / 100 : v;
+			});
 			const ign = d.map(r=>g(r,'_ign'));
 			const inj = d.map(r=>g(r,'_inj'));
 			const clt = d.map(r=>g(r,'_clt'));
