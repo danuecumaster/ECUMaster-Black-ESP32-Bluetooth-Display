@@ -8,6 +8,7 @@
 [![License: GPL v3](https://img.shields.io/badge/license-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0.en.html)
 [![Language: C++](https://img.shields.io/badge/language-C++-orange.svg)](https://isocpp.org)
 [![Vehicle Telemetry](https://img.shields.io/badge/type-Telemetry-lightgrey.svg)]()
+[![Data Logging](https://img.shields.io/badge/feature-Data%20Logging-green.svg)]()
 
 ---
 
