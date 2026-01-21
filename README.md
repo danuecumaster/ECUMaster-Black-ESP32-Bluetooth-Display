@@ -1,4 +1,4 @@
-# 🚗 ECUMaster Black + ESP32 Bluetooth Display
+# 🚗 ECUMaster Black + ESP32 Bluetooth Display & Logger
 
 [![ESP32](https://img.shields.io/badge/board-ESP32-blue.svg)](https://www.espressif.com/en/products/socs/esp32)
 [![ECUMaster](https://img.shields.io/badge/device-ECUMaster-black.svg)](https://www.ecumaster.com)
@@ -89,7 +89,7 @@ These values represent the **highest recorded readings since power-on**, allowin
 * Arduino Core v2.0.17
 * ECUMaster Black with Bluetooth Adapter
 * LVGL v8.3
-* microSD card (FAT32)
+* 8GB microSD card (FAT32)
 
 ---
 
@@ -113,7 +113,8 @@ These values represent the **highest recorded readings since power-on**, allowin
 * [BluetoothSerial](https://github.com/espressif/arduino-esp32/tree/master/libraries/BluetoothSerial)
 * [LVGL](https://lvgl.io)
 * [TFT_eSPI](https://github.com/Bodmer/TFT_eSPI)
-* SD / SPI (Arduino core)
+* [SPI](https://docs.arduino.cc/learn/communication/spi/)
+* [SD](https://docs.arduino.cc/libraries/sd/)
 
 ---
 
