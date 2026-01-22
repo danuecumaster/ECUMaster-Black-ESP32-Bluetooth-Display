@@ -122,7 +122,7 @@ These values represent the **highest recorded readings since power-on**, allowin
 ## 🔍 Log Analyzer (Web)
 
 👉 **Launch Log Analyzer**
-[https://danuecumaster.github.io/ECUMaster-Black-ESP32-Bluetooth-Display/log_analyzer/](https://danuecumaster.github.io/ECUMaster-Black-ESP32-Bluetooth-Display/log_analyzer/)
+[https://danuecumaster.github.io/ECUMaster-Black-ESP32-Bluetooth-Dashboard-Logger/log_analyzer/](https://danuecumaster.github.io/ECUMaster-Black-ESP32-Bluetooth-Dashboard-Logger/log_analyzer/)
 
 Features:
 
