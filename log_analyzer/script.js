@@ -1,3 +1,8 @@
+const getPlotHeight = () => {
+	const header = document.querySelector('.header')?.offsetHeight || 0;
+	const footer = document.querySelector('footer')?.offsetHeight || 0;
+	return window.innerHeight - header - footer;
+};
 const plot = document.getElementById('plot');
 document.getElementById('file').addEventListener('change', e => {
 	Papa.parse(e.target.files[0], {
@@ -24,7 +29,7 @@ document.getElementById('file').addEventListener('change', e => {
 			const spd = d.map(r=>g(r,'_spd'));
 
 			const zoomEnd = Math.floor(t.length * 0.15);
-
+	
 			Plotly.newPlot(plot,[
 				{x:t,y:map, xaxis:'x2', line:{color:'#3498db'}},
 				{x:t,y:rpm, xaxis:'x2', yaxis:'y2', line:{color:'#e74c3c'}},
@@ -38,7 +43,8 @@ document.getElementById('file').addEventListener('change', e => {
 				{x:t,y:clt, xaxis:'x', yaxis:'y7', line:{color:'#1abc9c'}},
 				{x:t,y:spd, xaxis:'x', yaxis:'y8', line:{color:'#00d4ff'}},
 			],{
-				height:950,
+				height: getPlotHeight(),
+				autosize: true,
 				hovermode:false,
 				showlegend:false,
 				margin:{t:40,l:50,r:60,b:30},
@@ -94,6 +100,8 @@ document.getElementById('file').addEventListener('change', e => {
 				paper_bgcolor:'#0f1117',
 				plot_bgcolor:'#0f1117',
 				font:{color:'#eaeaea'}
+			}).then(() => {
+				positionAxisLabels();
 			});
 			
 			const clampAxes = [
@@ -117,6 +125,7 @@ document.getElementById('file').addEventListener('change', e => {
 				if (Object.keys(update).length) {
 					Plotly.relayout(plot, update);
 				}
+				positionAxisLabels();
 			});
 			
 			// ---------- LABEL CLICK TO TOGGLE TRACE ----------
@@ -188,13 +197,18 @@ document.getElementById('file').addEventListener('change', e => {
 					}
 
 					// ---------- VERTICAL ----------
-					const bottomSpace = window.innerHeight - ev.clientY;
-					if (bottomSpace < boxH + pad) {
-						// show ABOVE cursor
-						hoverBox.style.top = `${y - boxH - pad}px`;
+					const spaceAbove = ev.clientY;
+					const spaceBelow = window.innerHeight - ev.clientY;
+
+					if (spaceAbove < boxH + pad) {
+						// too close to TOP → force BELOW
+						hoverBox.style.top = `${ev.clientY + pad+20}px`;
+					} else if (spaceBelow < boxH + pad) {
+						// too close to BOTTOM → force ABOVE
+						hoverBox.style.top = `${ev.clientY - boxH - pad}px`;
 					} else {
-						// show BELOW cursor
-						hoverBox.style.top = `${y + pad}px`;
+						// normal
+						hoverBox.style.top = `${ev.clientY + pad}px`;
 					}
 					
 					const f2 = v => Number.isFinite(v) ? v.toFixed(2) : '-';
@@ -265,6 +279,7 @@ document.getElementById('file').addEventListener('change', e => {
 			});
 		}
 	});
+	
 });
 
 document.getElementById('resetBtn').onclick = () => {
@@ -281,3 +296,44 @@ window.addEventListener('load', () => {
 	document.body.style.transition = 'opacity 0.5s ease';
 	document.body.style.opacity = '1';
 });
+
+window.addEventListener('resize', () => {
+	if (!plot._fullLayout) return;
+	Plotly.Plots.resize(plot);
+	positionAxisLabels();
+});
+
+function positionAxisLabels() {
+	const layout = plot._fullLayout;
+	if (!layout) return;
+
+	const traceToAxis = {
+		0: 'yaxis',
+		1: 'yaxis2',
+		2: 'yaxis3',
+		3: 'yaxis4',
+		4: 'yaxis5',
+		5: 'yaxis6',
+		6: 'yaxis7',
+		7: 'yaxis8'
+	};
+
+	const vh = window.innerHeight; 
+
+	document.querySelectorAll('.axis-label').forEach(label => {
+		const traceIndex = Number(label.dataset.trace);
+		const axisName = traceToAxis[traceIndex];
+		const axis = layout[axisName];
+
+		if (!axis || axis._offset == null || axis._length == null) return;
+
+		// ---- responsive offset ----
+		let offset = 25;        // desktop
+		if (vh < 800) offset = -10;
+		if (vh < 600) offset = -20;
+		if (axis._length < 110) offset -= 3;
+
+		label.style.display = 'flex';
+		label.style.top = `${axis._offset - offset}px`;
+	});
+}
