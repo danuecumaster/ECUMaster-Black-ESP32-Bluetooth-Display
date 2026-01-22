@@ -143,6 +143,14 @@ footer {
 	background: #0b0d12;
 	margin-top: 10px;
 }
+
+footer a {
+	font-size: 11px;
+	color: #666;
+}
+footer a:hover {
+	color: #fff;
+}
 #hoverBox {
 	background:#111;
 	font-family:monospace;
