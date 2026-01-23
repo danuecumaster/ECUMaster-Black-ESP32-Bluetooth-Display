@@ -347,7 +347,7 @@ void loop() {
 			snprintf(buf_rpm, sizeof(buf_rpm), "%d", rpm);
 			lv_table_set_cell_value(table, 0, 1, buf_rpm);
 		} else if (chData == 28) {
-			spd = (static_cast<int>(value) / 2.8f);
+			spd = (static_cast<int>(value));
 			snprintf(buf_spd, sizeof(buf_spd), "%d KM/H", spd);
 			lv_table_set_cell_value(table, 0, 3, buf_spd);
 		} else if (chData == 12) {
@@ -449,8 +449,8 @@ int decodeCheckEngine(uint16_t value) {
 			cel_names = "CLT ";
 		}
 		if (value & (1 << 1)) {
-			//cel_codes++;  // Bit 1
-			//cel_names += "IAT ";
+			cel_codes++;  // Bit 1
+			cel_names += "IAT ";
 		}
 		if (value & (1 << 2)) {
 			cel_codes++;  // Bit 2
@@ -461,16 +461,16 @@ int decodeCheckEngine(uint16_t value) {
 			cel_names += "WBO ";
 		}
 		if (value & (1 << 8)) {
-			//cel_codes++;  // Bit 8
-			//cel_names += "FF SENSOR ";
+			cel_codes++;  // Bit 8
+			cel_names += "FF SENSOR ";
 		}
 		if (value & (1 << 9)) {
-			//cel_codes++;  // Bit 9
-			//cel_names += "DBW ";
+			cel_codes++;  // Bit 9
+			cel_names += "DBW ";
 		}
 		if (value & (1 << 10)) {
-			//cel_codes++;  // Bit 10
-			//cel_names += "FPR ";
+			cel_codes++;  // Bit 10
+			cel_names += "FPR ";
 		}
 		lv_table_set_cell_value(table, 5, 1, cel_names.c_str());
 		return cel_codes;
